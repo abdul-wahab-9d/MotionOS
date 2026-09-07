@@ -1,0 +1,567 @@
+package com.sample.texteditor.showcase.talk
+
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
+/** Chapters of the talk — one state machine drives chrome. */
+enum class TalkPhase {
+    Idle,
+    Map,
+    Proof,
+    Draw,
+    Layout,
+    Excess,
+    Ship,
+}
+
+enum class SlideLayout {
+    Full,
+    Split,
+    FullBleed,
+}
+
+@Immutable
+data class TreeBranch(
+    val question: String,
+    val api: String,
+    val jumpToId: String? = null,
+    val sharedKey: String? = null,
+)
+
+@Immutable
+sealed interface SlideKind {
+    data object Title : SlideKind
+
+    data class Beats(
+        val bullets: List<String>,
+        val footnote: String? = null,
+    ) : SlideKind
+
+    data class Tree(
+        val heading: String,
+        val branches: List<TreeBranch>,
+    ) : SlideKind
+
+    data object Specs : SlideKind
+
+    data class Demo(
+        val demoId: String,
+        val beats: List<String>,
+        val apis: List<String>,
+        val code: List<String>,
+        val accentLine: Int = 0,
+        val sharedKey: String? = null,
+    ) : SlideKind
+
+    data object Excess : SlideKind
+    data object Apply : SlideKind
+    data object Qa : SlideKind
+
+    data class Code(
+        val label: String,
+        val lines: List<String>,
+        val accentLines: Set<Int> = emptySet(),
+    ) : SlideKind
+}
+
+@Immutable
+data class DeckSlide(
+    val id: String,
+    val phase: TalkPhase,
+    val layout: SlideLayout,
+    val kicker: String,
+    val title: String,
+    val notes: String,
+    val kind: SlideKind,
+)
+
+@Stable
+class TalkSession : TalkClickerHandler {
+    var index by mutableIntStateOf(0)
+        private set
+    var shortTrack by mutableStateOf(false)
+        private set
+    var notesVisible by mutableStateOf(false)
+        private set
+    var started by mutableStateOf(false)
+        private set
+
+    val slides: List<DeckSlide>
+        get() = buildTalkDeck(shortTrack)
+
+    val current: DeckSlide
+        get() = slides.getOrElse(index) { slides.first() }
+
+    override fun next(): Boolean {
+        started = true
+        val last = slides.lastIndex
+        if (index >= last) return true
+        index++
+        return true
+    }
+
+    override fun prev(): Boolean {
+        if (index <= 0) return true
+        index--
+        return true
+    }
+
+    override fun toggleNotes(): Boolean {
+        notesVisible = !notesVisible
+        return true
+    }
+
+    fun goTo(id: String) {
+        started = true
+        val i = slides.indexOfFirst { it.id == id }
+        if (i >= 0) index = i
+    }
+
+    fun onHoldComplete() {
+        started = true
+        if (index == 0 && slides.size > 1) index = 1
+    }
+
+    fun toggleShortTrack() {
+        val id = current.id
+        shortTrack = !shortTrack
+        val next = slides.indexOfFirst { it.id == id }
+        index = if (next >= 0) next else index.coerceIn(0, slides.lastIndex)
+    }
+}
+
+fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
+    val all = listOf(
+        DeckSlide(
+            id = "title",
+            phase = TalkPhase.Idle,
+            layout = SlideLayout.Full,
+            kicker = "MOTION OS",
+            title = "Compose Motion & Pixels",
+            notes = "Today is not every animation API. It’s how we choose — with live demos in this app.",
+            kind = SlideKind.Title,
+        ),
+        DeckSlide(
+            id = "goal",
+            phase = TalkPhase.Map,
+            layout = SlideLayout.Full,
+            kicker = "GOAL",
+            title = "Leave knowing which API",
+            notes = "Success: next time design asks for a morphing pay button, you pick updateTransition on purpose.",
+            kind = SlideKind.Beats(
+                bullets = listOf(
+                    "Which API for which problem — not a catalog dump",
+                    "When Canvas / custom Layout is actually worth it",
+                    "Shared performance rules we can ship with",
+                ),
+            ),
+        ),
+        DeckSlide(
+            id = "agenda",
+            phase = TalkPhase.Map,
+            layout = SlideLayout.Full,
+            kicker = "AGENDA",
+            title = "Five beats, then Q&A",
+            notes = "Walk the list. Promise the demos are the point.",
+            kind = SlideKind.Beats(
+                bullets = listOf(
+                    "Animation decision tree + live proof",
+                    "Graphics & Layout tree + live proof",
+                    "Performance checklist",
+                    "Apply to our apps",
+                    "Q&A",
+                ),
+            ),
+        ),
+        DeckSlide(
+            id = "restraint",
+            phase = TalkPhase.Map,
+            layout = SlideLayout.Full,
+            kicker = "RESTRAINT",
+            title = "When not to animate",
+            notes = "Compose makes custom motion easy. That doesn’t mean every screen needs it.",
+            kind = SlideKind.Beats(
+                bullets = listOf(
+                    "Prefer system / Material defaults first",
+                    "Motion must serve hierarchy or feedback",
+                    "If it fights readability or a11y — cut it",
+                    "Games and Canvas are rare in product UI",
+                ),
+                footnote = "Custom is for moments that sell the product.",
+            ),
+        ),
+        DeckSlide(
+            id = "anim_tree",
+            phase = TalkPhase.Map,
+            layout = SlideLayout.Full,
+            kicker = "ANIMATION",
+            title = "Need motion?",
+            notes = "Spine of the talk. We’ll demo the middle and bottom. Ask: where would a checkout button sit?",
+            kind = SlideKind.Tree(
+                heading = "Tap a branch we will prove",
+                branches = listOf(
+                    TreeBranch("Appear / disappear?", "AnimatedVisibility"),
+                    TreeBranch("Swap content / screens?", "AnimatedContent"),
+                    TreeBranch(
+                        question = "Many props, one state?",
+                        api = "updateTransition",
+                        jumpToId = "morph",
+                        sharedKey = "branch-updateTransition",
+                    ),
+                    TreeBranch(
+                        question = "Imperative / interruptible?",
+                        api = "Animatable",
+                        jumpToId = "wipe",
+                        sharedKey = "branch-animatable",
+                    ),
+                    TreeBranch(
+                        question = "Gesture / organic settle?",
+                        api = "spring()",
+                        jumpToId = "orbital",
+                        sharedKey = "branch-spring",
+                    ),
+                    TreeBranch(
+                        question = "Authored “story” timing?",
+                        api = "keyframes",
+                        jumpToId = "wipe",
+                        sharedKey = "branch-keyframes",
+                    ),
+                    TreeBranch(
+                        question = "List ↔ detail continuity?",
+                        api = "SharedTransition",
+                        jumpToId = "shared",
+                        sharedKey = "branch-shared",
+                    ),
+                    TreeBranch(
+                        question = "Per-frame draw / game?",
+                        api = "withFrameNanos + Canvas",
+                        jumpToId = "excess",
+                        sharedKey = "branch-frame",
+                    ),
+                ),
+            ),
+        ),
+        DeckSlide(
+            id = "specs",
+            phase = TalkPhase.Map,
+            layout = SlideLayout.Full,
+            kicker = "SPECS",
+            title = "Intent, not decoration",
+            notes = "Wrong spec = uncanny motion even if the values are fine. Play the same chip four ways.",
+            kind = SlideKind.Specs,
+        ),
+        DeckSlide(
+            id = "morph",
+            phase = TalkPhase.Proof,
+            layout = SlideLayout.Split,
+            kicker = "PROOF",
+            title = "Morphing Action Button",
+            notes = "Idle → Loading → Success/Error. Structure leads, label trails ~120ms. PathMeasure draws the check.",
+            kind = SlideKind.Demo(
+                demoId = "morphing_button",
+                beats = listOf(
+                    "One state. Width, color, glyph stay in lockstep.",
+                    "Tween the structure. Spring the glyph.",
+                    "Pay / save / sync in our apps.",
+                ),
+                apis = listOf("updateTransition", "animateDp", "PathMeasure", "graphicsLayer"),
+                code = listOf(
+                    "updateTransition(state)",
+                    "animateDp { Idle → 280.dp; Loading → 66.dp }",
+                    "textAlpha  delayMillis = 120  // structure leads",
+                ),
+                accentLine = 2,
+                sharedKey = "branch-updateTransition",
+            ),
+        ),
+        DeckSlide(
+            id = "code_morph",
+            phase = TalkPhase.Proof,
+            layout = SlideLayout.Full,
+            kicker = "CODE",
+            title = "updateTransition — morphing button",
+            notes = "Show on request. Line 6 (animateDp) and line 14 (delayMillis) are the interesting parts.",
+            kind = SlideKind.Code(
+                label = "updateTransition — morphing button",
+                lines = listOf(
+                    "val transition = updateTransition(",
+                    "    targetState = state,",
+                    "    label = \"morphing_action\",",
+                    ")",
+                    "",
+                    "val width by transition.animateDp { s ->",
+                    "    when (s) {",
+                    "        ButtonState.Idle    -> 280.dp",
+                    "        ButtonState.Loading ->  66.dp",
+                    "        ButtonState.Done    ->  66.dp",
+                    "    }",
+                    "}",
+                    "",
+                    "val textAlpha by transition.animateFloat(",
+                    "    transitionSpec = { tween(delayMillis = 120) }",
+                    ") { if (it == ButtonState.Idle) 1f else 0f }",
+                    "// structure leads — label fades 120ms later",
+                ),
+                accentLines = setOf(5, 14, 16),
+            ),
+        ),
+        DeckSlide(
+            id = "wipe",
+            phase = TalkPhase.Proof,
+            layout = SlideLayout.FullBleed,
+            kicker = "PROOF",
+            title = "Keyframes Theme Wipe",
+            notes = "Race ahead, overshoot, settle. Animation drives clipRect — a drawing primitive.",
+            kind = SlideKind.Demo(
+                demoId = "keyframes_wipe",
+                beats = listOf("Tap to wipe light ↔ dark."),
+                apis = listOf("Animatable", "keyframes", "clipRect"),
+                code = listOf(
+                    "keyframes {",
+                    "  0.90f at 520  using cinematic",
+                    "  overshoot at 700",
+                    "  target at 850",
+                    "}",
+                ),
+                accentLine = 2,
+                sharedKey = "branch-keyframes",
+            ),
+        ),
+        DeckSlide(
+            id = "code_wipe",
+            phase = TalkPhase.Proof,
+            layout = SlideLayout.Full,
+            kicker = "CODE",
+            title = "drawWithContent — clip wipe",
+            notes = "Show on request. The Modifier extension is the pattern to steal — animation drives a drawing primitive, not a layout property.",
+            kind = SlideKind.Code(
+                label = "drawWithContent — clip wipe",
+                lines = listOf(
+                    "// Modifier extension — reusable anywhere",
+                    "fun Modifier.clipToFraction(f: Float): Modifier =",
+                    "    drawWithContent {",
+                    "        clipRect(right = size.width * f) {",
+                    "            this@drawWithContent.drawContent()",
+                    "        }",
+                    "    }",
+                    "",
+                    "// Animatable drives the clip, not a layout property",
+                    "val fraction = remember { Animatable(0f) }",
+                    "fraction.animateTo(",
+                    "    targetValue = 1f,",
+                    "    animationSpec = keyframes {",
+                    "        durationMillis = 850",
+                    "        0.90f at 520 using CinematicEasing  // race ahead",
+                    "        1.03f at 700                        // overshoot",
+                    "        1.00f at 850                        // settle",
+                    "    }",
+                    ")",
+                ),
+                accentLines = setOf(1, 2, 3, 4, 5, 6, 14, 15, 16),
+            ),
+        ),
+        DeckSlide(
+            id = "shared",
+            phase = TalkPhase.Proof,
+            layout = SlideLayout.Split,
+            kicker = "PROOF",
+            title = "Shared Element Gallery",
+            notes = "Stable unique keys. Don’t share huge subtrees. Test back stack in real nav.",
+            kind = SlideKind.Demo(
+                demoId = "shared_elements",
+                beats = listOf(
+                    "The card travels — it doesn't swap.",
+                    "Keys: swatch-id, title-id.",
+                    "Compose's answer to hero transitions.",
+                ),
+                apis = listOf("SharedTransitionLayout", "sharedElement", "AnimatedContent"),
+                code = listOf(
+                    "SharedTransitionLayout {",
+                    "  Modifier.sharedElement(",
+                    "    rememberSharedContentState(\"swatch-\$id\")",
+                    "  )",
+                    "}",
+                ),
+                accentLine = 2,
+                sharedKey = "branch-shared",
+            ),
+        ),
+        DeckSlide(
+            id = "gfx_tree",
+            phase = TalkPhase.Draw,
+            layout = SlideLayout.Full,
+            kicker = "GRAPHICS",
+            title = "Draw or place?",
+            notes = "Canvas is not a layout system. Layout is not a drawing API.",
+            kind = SlideKind.Tree(
+                heading = "Custom drawing or layout?",
+                branches = listOf(
+                    TreeBranch("Tint / shape / clip only?", "Modifier / Shape"),
+                    TreeBranch(
+                        question = "Charts, gauges, game art?",
+                        api = "Canvas + DrawScope",
+                        jumpToId = "chart",
+                        sharedKey = "branch-canvas",
+                    ),
+                    TreeBranch(
+                        question = "Children in custom positions?",
+                        api = "custom Layout",
+                        jumpToId = "orbital",
+                        sharedKey = "branch-layout",
+                    ),
+                    TreeBranch("Deferred / dependent measure?", "SubcomposeLayout"),
+                ),
+            ),
+        ),
+        DeckSlide(
+            id = "chart",
+            phase = TalkPhase.Draw,
+            layout = SlideLayout.Split,
+            kicker = "DRAW",
+            title = "Canvas Pulse Chart",
+            notes = "Grid, area path, stroke, bars — all DrawScope. One Animatable(0→1); bars stagger locally.",
+            kind = SlideKind.Demo(
+                demoId = "canvas_chart",
+                beats = listOf(
+                    "Designer gives you a custom chart? This is where you land.",
+                    "One fraction. Many properties.",
+                    "Same cinematic pattern as UI morphs.",
+                ),
+                apis = listOf("Canvas", "Path", "Animatable", "stagger"),
+                code = listOf(
+                    "val t = remember { Animatable(0f) }",
+                    "Canvas { drawPath(area, brush) }",
+                    "localT = ((t - i * 0.06f) / 0.7f)",
+                ),
+                accentLine = 0,
+                sharedKey = "branch-canvas",
+            ),
+        ),
+        DeckSlide(
+            id = "orbital",
+            phase = TalkPhase.Layout,
+            layout = SlideLayout.Split,
+            kicker = "LAYOUT",
+            title = "Orbital Menu",
+            notes = "No Row/Column trigonometry hacks. Measure children, then place on a circle from progress.",
+            kind = SlideKind.Demo(
+                demoId = "orbital_layout",
+                beats = listOf(
+                    "Layout places. Canvas draws.",
+                    "Radius driven by Animatable.",
+                    "Spring on tap — organic settle.",
+                ),
+                apis = listOf("Layout", "MeasurePolicy", "placeRelative", "spring"),
+                code = listOf(
+                    "Layout { measurables, constraints ->",
+                    "  val r = min(w, h) * 0.34f * progress",
+                    "  placeable.placeRelative(x, y)",
+                    "}",
+                ),
+                accentLine = 1,
+                sharedKey = "branch-layout",
+            ),
+        ),
+        DeckSlide(
+            id = "code_orbital",
+            phase = TalkPhase.Layout,
+            layout = SlideLayout.Full,
+            kicker = "CODE",
+            title = "custom Layout — orbital placement",
+            notes = "Show on request. The radius line and placeRelative are the heart of it.",
+            kind = SlideKind.Code(
+                label = "custom Layout — orbital placement",
+                lines = listOf(
+                    "Layout(content = content) { measurables, constraints ->",
+                    "    val placeables = measurables.map {",
+                    "        it.measure(constraints.copy(minWidth = 0, minHeight = 0))",
+                    "    }",
+                    "    layout(constraints.maxWidth, constraints.maxHeight) {",
+                    "        val cx = constraints.maxWidth  / 2",
+                    "        val cy = constraints.maxHeight / 2",
+                    "        placeables.forEachIndexed { i, p ->",
+                    "            val angle = 2 * PI / placeables.size * i",
+                    "            val r = min(cx, cy) * 0.34f * progress",
+                    "            p.placeRelative(",
+                    "                x = (cx + cos(angle) * r).toInt() - p.width  / 2,",
+                    "                y = (cy + sin(angle) * r).toInt() - p.height / 2,",
+                    "            )",
+                    "        }",
+                    "    }",
+                    "}",
+                ),
+                accentLines = setOf(9, 10, 11),
+            ),
+        ),
+        DeckSlide(
+            id = "excess",
+            phase = TalkPhase.Excess,
+            layout = SlideLayout.FullBleed,
+            kicker = "INTENSITY",
+            title = "Same toolbox. Different intensity.",
+            notes = "Pick ONE. Aurora = cinematic UI. Neon Rush = game loop. Neither is default product UI.",
+            kind = SlideKind.Excess,
+        ),
+        DeckSlide(
+            id = "perf",
+            phase = TalkPhase.Ship,
+            layout = SlideLayout.Full,
+            kicker = "SHIP",
+            title = "Performance checklist",
+            notes = "Walk bullets with what breaks if we ignore this.",
+            kind = SlideKind.Beats(
+                bullets = listOf(
+                    "graphicsLayer / draw / offset { } — not layout every frame",
+                    "Cache Path / paints in hot 60fps loops",
+                    "One shared clock for coordinated effects",
+                    "Don’t animate a state read in every parent",
+                    "Shared elements: stable keys, small regions",
+                    "Shaders / AGSL: API guards + fallbacks",
+                ),
+            ),
+        ),
+        DeckSlide(
+            id = "apply",
+            phase = TalkPhase.Ship,
+            layout = SlideLayout.Full,
+            kicker = "OUR APPS",
+            title = "Fill this with the room",
+            notes = "Capture 2–3 real tickets. Canvas only when components can’t express the design.",
+            kind = SlideKind.Apply,
+        ),
+        DeckSlide(
+            id = "resources",
+            phase = TalkPhase.Ship,
+            layout = SlideLayout.Full,
+            kicker = "LEAVE-BEHIND",
+            title = "The lab is this repo",
+            notes = "Lab files map 1:1 to demos today.",
+            kind = SlideKind.Beats(
+                bullets = listOf(
+                    "Compose Lab → app/.../showcase/",
+                    "Handout → docs/compose-lab-handout.md",
+                    "Android docs: Shared elements, Animation",
+                    "Volume down / D-pad / space — next slide",
+                ),
+                footnote = "No tablet? Phone layout is a tap-through lab.",
+            ),
+        ),
+        DeckSlide(
+            id = "qa",
+            phase = TalkPhase.Ship,
+            layout = SlideLayout.Full,
+            kicker = "Q&A",
+            title = "Your motion bugs, please",
+            notes = "Where have we fought jank? Any design ask that forced Canvas prematurely?",
+            kind = SlideKind.Qa,
+        ),
+    )
+
+    if (!shortTrack) return all
+    val skip = setOf("excess", "code_morph", "code_wipe", "code_orbital")
+    return all.filterNot { it.id in skip }
+}

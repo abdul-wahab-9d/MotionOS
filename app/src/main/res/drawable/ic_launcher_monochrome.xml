@@ -1,0 +1,20 @@
+<!--
+  Adaptive-icon MONOCHROME layer for Android 13+ themed icons. Single-colour
+  silhouette; the system supplies its own tint + background. Same document
+  shape as the foreground, with the text lines punched out as holes
+  (fillType="evenOdd") so the glyph keeps its detail when tinted.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M36,29 L60,29 L72,41 L72,79 L36,79 Z
+                          M43,50 L65,50 L65,53 L43,53 Z
+                          M43,58 L65,58 L65,61 L43,61 Z
+                          M43,66 L57,66 L57,69 L43,69 Z" />
+</vector>
