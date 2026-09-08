@@ -184,14 +184,16 @@ Custom drawing or layout?
 
 ---
 
-## Slide 13 — DEMO: Orbital Menu Layout *(~3–4 min)*
+## Slide 13 — DEMO: Fan Deck Layout *(~3–4 min)*
 
-**Open:** Orbital Menu Layout · tap nodes  
+**Open:** Fan Deck · swipe or tap a card  
 
 **Say:**
-> No Row/Column trigonometry hacks. We implement `Layout`: measure children, then `place` on a circle from progress. This is “custom layout from scratch.”
+> No Row/Column trigonometry hacks. We implement `Layout`: measure children, then `placeRelative` on an ellipse. Selected sits at 6 o’clock — `zIndex` is frontness. `graphicsLayer` sells the 3D; Canvas draws the ring. That split is the whole lesson.
 
-**Call out:** `Layout { measurables, constraints -> … placeable.placeRelative }`, radius driven by `Animatable`.
+**Call out:** `Layout { measurables, constraints -> … placeRelative(x, y, zIndex) }`, spring settle after swipe.
+
+**Team hook:** wallet / stories / picker — not a circle of letter-dots.
 
 **30‑min:** Keep this demo.
 
@@ -233,7 +235,7 @@ Custom drawing or layout?
 | List → detail | Shared elements |
 | Theme / onboarding flourish | keyframes (sparingly) |
 | Analytics widget | Canvas chart |
-| Radial quick actions | custom Layout (if design requires) |
+| Radial / fan picker | custom Layout (if design requires) |
 | Everything else | Material + Visibility/Content |
 
 **Say:** Facilitate. Capture 2–3 real tickets. Agree: Canvas only when components can’t express the design.
@@ -282,7 +284,7 @@ Custom drawing or layout?
 | Keep | Cut / recording-only |
 |------|----------------------|
 | Slides 1–7 (catalog = flash), 8, 10, 11–13, 15 | Slide 9 live, Slide 14, deep Slide 16 |
-| Morphing, Shared, Chart, Orbital | Wipe live, Aurora/Rush |
+| Morphing, Shared, Chart, Fan Deck | Wipe live, Aurora/Rush |
 
 ---
 
@@ -293,7 +295,7 @@ Custom drawing or layout?
 | Open + when not to animate | 4 |
 | Animation tree + specs + catalog | 5 |
 | Morphing + Wipe + Shared | 12 |
-| Graphics tree + Chart + Orbital | 12 |
+| Graphics tree + Chart + Fan Deck | 12 |
 | Wow (optional) | 3 |
 | Performance + our apps | 8 |
 | Q&A + thank you | 5–10 |

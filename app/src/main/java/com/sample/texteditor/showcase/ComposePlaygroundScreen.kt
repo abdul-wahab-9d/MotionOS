@@ -103,8 +103,8 @@ private val Demos = listOf(
     ),
     DemoEntry(
         id = "orbital_layout",
-        title = "Orbital Menu Layout",
-        subtitle = "Custom Layout / MeasurePolicy — circle placement",
+        title = "Fan Deck Layout",
+        subtitle = "Custom Layout · ellipse + zIndex · spring swipe",
         section = "Custom Layout & Graphics",
         reusable = false,
         icon = Icons.Outlined.Hub,
@@ -258,7 +258,7 @@ fun PlaygroundDemoHost(
         "canvas_chart" -> DemoScaffold("Canvas Pulse Chart", onBack, modifier) {
             CanvasPulseChartDemo()
         }
-        "orbital_layout" -> DemoScaffold("Orbital Menu Layout", onBack, modifier) {
+        "orbital_layout" -> DemoScaffold("Fan Deck Layout", onBack, modifier) {
             OrbitalMenuLayoutDemo()
         }
         "neon_rush" -> FullBleedDemo(onBack, modifier) {

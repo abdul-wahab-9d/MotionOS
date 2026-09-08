@@ -12,7 +12,7 @@
 | Swap screens / content | `AnimatedContent` | Shared Element (host) |
 | Many properties, one state | `updateTransition` | **Morphing Action Button** |
 | Imperative / cancel / sequence | `Animatable` | **Aurora Unlock**, **Theme Wipe** |
-| Gesture settle / organic | `spring()` | **Neon Rush** lanes, Orbital |
+| Gesture settle / organic | `spring()` | **Neon Rush** lanes, Fan Deck |
 | Authored timing / overshoot | `keyframes` | **Keyframes Theme Wipe** |
 | List ↔ detail continuity | `SharedTransitionLayout` + `sharedElement` | **Shared Element Gallery** |
 | Per-frame sim / particles | `withFrameNanos` + Canvas | **Neon Rush**, Aurora orbits |
@@ -33,7 +33,7 @@ Cross-screen continuity? → Shared elements │ Game/draw loop? → Frame clock
 |---------|-----|----------|
 | Tint / clip / shape | `Modifier` / `Shape` | — |
 | Charts, gauges, custom art | `Canvas` + `DrawScope` | **Canvas Pulse Chart**, Neon Rush |
-| Children in custom positions | `Layout` / MeasurePolicy | **Orbital Menu Layout** |
+| Children in custom positions | `Layout` / MeasurePolicy | **Fan Deck Layout** |
 | Deferred dependent measure | `SubcomposeLayout` | (follow-up) |
 
 ```
@@ -58,7 +58,7 @@ Place children yourself? → custom Layout  │  Measure depends on content? →
 
 ## Suggested live order (demo day)
 
-1. Morphing Button → 2. Theme Wipe → 3. Shared Elements → 4. Canvas Chart → 5. Orbital Layout → (optional) Aurora / Neon Rush
+1. Morphing Button → 2. Theme Wipe → 3. Shared Elements → 4. Canvas Chart → 5. Fan Deck Layout → (optional) Aurora / Neon Rush
 
 ---
 
@@ -84,7 +84,7 @@ Place children yourself? → custom Layout  │  Measure depends on content? →
 | `KeyframesThemeWipeDemo.kt` | `keyframes` + clip wipe |
 | `SharedElementGalleryDemo.kt` | Shared elements |
 | `CanvasPulseChartDemo.kt` | DrawScope charts |
-| `OrbitalMenuLayoutDemo.kt` | Custom `Layout` |
+| `OrbitalMenuLayoutDemo.kt` | Custom `Layout` fan deck |
 | `AuroraUnlockScreen.kt` | `Animatable` + PathMeasure |
 | `NeonRushGame.kt` | Canvas game loop |
 

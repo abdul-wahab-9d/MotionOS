@@ -624,7 +624,7 @@ internal fun ApplyTable(modifier: Modifier = Modifier) {
             ApplyRow("List → detail", "Shared elements", "Gallery"),
             ApplyRow("Theme / onboarding flourish", "keyframes (sparingly)", "Wipe"),
             ApplyRow("Analytics widget", "Canvas chart", "Chart"),
-            ApplyRow("Radial quick actions", "custom Layout (if design requires)", "Orbital"),
+            ApplyRow("Radial / fan picker", "custom Layout (if design requires)", "Fan deck"),
             ApplyRow("Everything else", "Material + Visibility / Content", "Default"),
         )
     }
