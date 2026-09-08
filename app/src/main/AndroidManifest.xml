@@ -18,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".showcase.PortraitDemoActivity"
+            android:exported="false"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.TextEditorSample" />
     </application>
 
 </manifest>

@@ -38,6 +38,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -93,6 +94,7 @@ internal fun TalkPhase.accent(): Color = when (this) {
     TalkPhase.Layout -> TalkInk.Pink
     TalkPhase.Excess -> TalkInk.Amber
     TalkPhase.Ship -> TalkInk.Teal
+    TalkPhase.Close -> TalkInk.Amber
 }
 
 internal fun TalkPhase.label(): String = name.lowercase()
@@ -489,6 +491,125 @@ internal fun CodeCaption(
                 fontWeight = if (i == accentLine) FontWeight.SemiBold else FontWeight.Normal,
             )
         }
+    }
+}
+
+@Immutable
+private data class ApiCatalogRow(val api: String, val does: String)
+
+@Immutable
+private data class ApiCatalogGroup(val heading: String, val rows: List<ApiCatalogRow>)
+
+@Composable
+internal fun AnimationApiCatalog(modifier: Modifier = Modifier) {
+    val groups = remember {
+        listOf(
+            ApiCatalogGroup(
+                heading = "APPEAR & SWAP",
+                rows = listOf(
+                    ApiCatalogRow("AnimatedVisibility", "Show or hide with Enter / Exit"),
+                    ApiCatalogRow("AnimatedContent", "Swap screens or content (A → B)"),
+                    ApiCatalogRow("Crossfade", "Fade-only content swap"),
+                    ApiCatalogRow("animateContentSize", "Animate a node’s size when children change"),
+                ),
+            ),
+            ApiCatalogGroup(
+                heading = "DRIVE VALUES",
+                rows = listOf(
+                    ApiCatalogRow("animate*AsState", "One property toward one target"),
+                    ApiCatalogRow("updateTransition", "Many properties, one discrete state"),
+                    ApiCatalogRow("Animatable", "Imperative: snap, stop, sequence, cancel"),
+                    ApiCatalogRow("rememberInfiniteTransition", "Looping values — loaders, ambient"),
+                    ApiCatalogRow("animateDecay", "Fling from remaining velocity"),
+                ),
+            ),
+            ApiCatalogGroup(
+                heading = "SPECS  ·  INTENT",
+                rows = listOf(
+                    ApiCatalogRow("tween", "Directed, timed — enter, morph, structure"),
+                    ApiCatalogRow("spring", "Physics settle — drag release, playful tap"),
+                    ApiCatalogRow("keyframes", "Authored story — race, pause, overshoot"),
+                    ApiCatalogRow("snap", "Jump with no interpolation"),
+                    ApiCatalogRow("repeatable / infiniteRepeatable", "Play N times, or forever"),
+                ),
+            ),
+            ApiCatalogGroup(
+                heading = "CONTINUITY",
+                rows = listOf(
+                    ApiCatalogRow("SharedTransitionLayout", "Scope wrapping both destinations"),
+                    ApiCatalogRow("sharedElement", "The same visual object travels"),
+                    ApiCatalogRow("sharedBounds", "Bounds morph; content inside can differ"),
+                ),
+            ),
+            ApiCatalogGroup(
+                heading = "PER-FRAME",
+                rows = listOf(
+                    ApiCatalogRow("withFrameNanos", "Vsync clock — simulation, games, orbits"),
+                ),
+            ),
+        )
+    }
+
+    Column(modifier.fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth().padding(bottom = 6.dp, start = 8.dp, end = 8.dp)) {
+            Text(
+                "API",
+                color = TalkInk.Dim,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.weight(0.42f),
+            )
+            Text(
+                "WHAT IT DOES",
+                color = TalkInk.Dim,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.weight(0.58f),
+            )
+        }
+        groups.forEach { group ->
+            Text(
+                text = group.heading,
+                color = TalkInk.Cyan,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 2.sp,
+                modifier = Modifier.padding(top = 10.dp, bottom = 4.dp, start = 8.dp),
+            )
+            group.rows.forEach { row ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.dp, horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = row.api,
+                        color = TalkInk.Mist,
+                        fontFamily = FontFamily.Monospace,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(0.42f),
+                    )
+                    Text(
+                        text = row.does,
+                        color = TalkInk.Mute,
+                        fontSize = 14.sp,
+                        lineHeight = 18.sp,
+                        modifier = Modifier.weight(0.58f),
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = "Not every function in androidx.compose.animation — the set we choose from. Tree picks; table names.",
+            color = TalkInk.Dim,
+            fontSize = 13.sp,
+            modifier = Modifier.padding(horizontal = 8.dp),
+        )
     }
 }
 

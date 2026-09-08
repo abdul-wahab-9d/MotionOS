@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Text
@@ -48,6 +49,7 @@ private fun LabHost(
     showReturnToTalk: Boolean,
     onReturnToTalk: () -> Unit,
 ) {
+    val context = LocalContext.current
     var demoId by rememberSaveable { mutableStateOf<String?>(null) }
     Column(
         Modifier
@@ -69,7 +71,13 @@ private fun LabHost(
         }
         if (demoId == null) {
             ComposePlaygroundScreen(
-                onOpenDemo = { demoId = it },
+                onOpenDemo = { id ->
+                    if (PortraitDemoActivity.isPortraitDemo(id)) {
+                        PortraitDemoActivity.open(context, id)
+                    } else {
+                        demoId = id
+                    }
+                },
                 modifier = Modifier.weight(1f),
             )
         } else {

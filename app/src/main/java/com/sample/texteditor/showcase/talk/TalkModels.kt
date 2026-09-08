@@ -16,6 +16,7 @@ enum class TalkPhase {
     Layout,
     Excess,
     Ship,
+    Close,
 }
 
 enum class SlideLayout {
@@ -47,6 +48,7 @@ sealed interface SlideKind {
     ) : SlideKind
 
     data object Specs : SlideKind
+    data object ApiCatalog : SlideKind
 
     data class Demo(
         val demoId: String,
@@ -60,6 +62,7 @@ sealed interface SlideKind {
     data object Excess : SlideKind
     data object Apply : SlideKind
     data object Qa : SlideKind
+    data object Thanks : SlideKind
 
     data class Code(
         val label: String,
@@ -253,6 +256,15 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             title = "Intent, not decoration",
             notes = "Wrong spec = uncanny motion even if the values are fine. Play the same chip four ways.",
             kind = SlideKind.Specs,
+        ),
+        DeckSlide(
+            id = "api_catalog",
+            phase = TalkPhase.Map,
+            layout = SlideLayout.Full,
+            kicker = "CATALOG",
+            title = "Animation APIs — what they do",
+            notes = "Don’t read the table. The tree picks; this names them. Point at Appear, Drive, Specs, Continuity, Frame — then demo.",
+            kind = SlideKind.ApiCatalog,
         ),
         DeckSlide(
             id = "morph",
@@ -503,7 +515,7 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             layout = SlideLayout.FullBleed,
             kicker = "INTENSITY",
             title = "Same toolbox. Different intensity.",
-            notes = "Pick ONE. Aurora = cinematic UI. Neon Rush = game loop. Neither is default product UI.",
+            notes = "Pick ONE. Tap opens a portrait activity — rotate the emulator. Aurora = cinematic UI. Neon Rush = game loop. Back returns to the landscape deck.",
             kind = SlideKind.Excess,
         ),
         DeckSlide(
@@ -556,8 +568,17 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             layout = SlideLayout.Full,
             kicker = "Q&A",
             title = "Your motion bugs, please",
-            notes = "Where have we fought jank? Any design ask that forced Canvas prematurely?",
+            notes = "If silent, use the prompts. Close on the two takeaways at the bottom — Layout vs Animation in one breath each.",
             kind = SlideKind.Qa,
+        ),
+        DeckSlide(
+            id = "thanks",
+            phase = TalkPhase.Close,
+            layout = SlideLayout.FullBleed,
+            kicker = "CLOSE",
+            title = "Thank You",
+            notes = "Let the letters land. Credit Hammad Nawaz and the team. Tap to replay the close. Don’t talk over the cascade.",
+            kind = SlideKind.Thanks,
         ),
     )
 

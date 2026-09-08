@@ -100,7 +100,18 @@ Need motion?
 
 ---
 
-## Slide 7 — DEMO: Morphing Action Button *(~3–4 min)*
+## Slide 7 — Animation API catalog *(~45s, don’t read)*
+
+**On screen:** table grouped Appear / Drive / Specs / Continuity / Frame
+
+**Say:**
+> The tree picks. This names the set. Appear and swap you know. Today we prove Drive, Specs, Continuity — and Frame only as intensity.
+
+**30‑min:** Flash 20s; don’t walk rows.
+
+---
+
+## Slide 8 — DEMO: Morphing Action Button *(~3–4 min)*
 
 **Open:** Compose Lab → Morphing Action Button  
 
@@ -115,7 +126,7 @@ Need motion?
 
 ---
 
-## Slide 8 — DEMO: Keyframes Theme Wipe *(~3 min)*
+## Slide 9 — DEMO: Keyframes Theme Wipe *(~3 min)*
 
 **Open:** Keyframes Theme Wipe · tap to wipe  
 
@@ -128,7 +139,7 @@ Need motion?
 
 ---
 
-## Slide 9 — DEMO: Shared Element Gallery *(~4 min)*
+## Slide 10 — DEMO: Shared Element Gallery *(~4 min)*
 
 **Open:** Shared Element Gallery · tap card · tap back  
 
@@ -143,7 +154,7 @@ Need motion?
 
 ---
 
-## Slide 10 — Graphics / Layout decision tree ★
+## Slide 11 — Graphics / Layout decision tree ★
 
 **On screen:**
 
@@ -160,7 +171,7 @@ Custom drawing or layout?
 
 ---
 
-## Slide 11 — DEMO: Canvas Pulse Chart *(~3–4 min)*
+## Slide 12 — DEMO: Canvas Pulse Chart *(~3–4 min)*
 
 **Open:** Canvas Pulse Chart  
 
@@ -173,7 +184,7 @@ Custom drawing or layout?
 
 ---
 
-## Slide 12 — DEMO: Orbital Menu Layout *(~3–4 min)*
+## Slide 13 — DEMO: Orbital Menu Layout *(~3–4 min)*
 
 **Open:** Orbital Menu Layout · tap nodes  
 
@@ -186,19 +197,19 @@ Custom drawing or layout?
 
 ---
 
-## Slide 13 — Optional wow *(60‑min only, pick ONE, ~3 min)*
+## Slide 14 — Optional wow *(60‑min only, pick ONE, ~3 min)*
 
-**A — Aurora Unlock:** hold core  
+**A — Aurora Unlock:** tap card → portrait activity. Rotate the emulator. Hold core.  
 > Imperative `Animatable`, springs, shared clock orbits, PathMeasure seal.
 
-**B — Neon Rush:** tap to race  
+**B — Neon Rush:** tap card → portrait activity. Rotate the emulator. Tap to race.  
 > `withFrameNanos` game loop — same Canvas primitives, real-time simulation. Cool, but not default product UI.
 
-**Say:** “Same toolbox; different intensity.”
+**Say:** “Same toolbox; different intensity. These two are phone UI — that’s why they leave the landscape deck.”
 
 ---
 
-## Slide 14 — Performance checklist
+## Slide 15 — Performance checklist
 
 **On screen:**
 1. Prefer `graphicsLayer` / draw / `offset { }` over layout thrash every frame  
@@ -212,7 +223,7 @@ Custom drawing or layout?
 
 ---
 
-## Slide 15 — Apply to *our* apps *(~5 min)*
+## Slide 16 — Apply to *our* apps *(~5 min)*
 
 **On screen:** empty table — fill live with the room
 
@@ -229,7 +240,7 @@ Custom drawing or layout?
 
 ---
 
-## Slide 16 — Resources
+## Slide 17 — Resources
 
 **On screen:**
 - Compose Lab in this repo (`showcase/`)
@@ -240,12 +251,29 @@ Custom drawing or layout?
 
 ---
 
-## Slide 17 — Q&A
+## Slide 18 — Q&A
+
+**On screen:** prompts + two take-home cards (Layout / Animation)
 
 **Prompt questions if silent:**
 - “Where have we fought motion jank?”
 - “Any design asks that forced Canvas prematurely?”
 - “Who wants a follow-up on Nav + shared elements?”
+
+**Close on the cards (~20s):**
+> Layout: measure children, then `placeRelative`. Canvas draws pixels; it does not place children.
+> Animation: Visibility you know. Custom is `Animatable` + a spec. Story = `keyframes`. Physics = `spring`. Continuity = shared elements.
+
+---
+
+## Slide 19 — Thank You *(let it play)*
+
+**On screen:** letter cascade · Team Lead Hammad Nawaz · signature flourish · API chips · “and the team”
+
+**Say (~20s, after letters land):**
+> Thank you. Team lead Hammad Nawaz — and the team. Tap the slide if you want to see the close again.
+
+**Don’t:** Talk over the cascade. The animation *is* the closer.
 
 ---
 
@@ -253,7 +281,7 @@ Custom drawing or layout?
 
 | Keep | Cut / recording-only |
 |------|----------------------|
-| Slides 1–6, 7, 9, 10–12, 14 | Slide 8 live, Slide 13, deep Slide 15 |
+| Slides 1–7 (catalog = flash), 8, 10, 11–13, 15 | Slide 9 live, Slide 14, deep Slide 16 |
 | Morphing, Shared, Chart, Orbital | Wipe live, Aurora/Rush |
 
 ---
@@ -263,9 +291,9 @@ Custom drawing or layout?
 | Block | Min |
 |-------|-----|
 | Open + when not to animate | 4 |
-| Animation tree + specs | 4 |
+| Animation tree + specs + catalog | 5 |
 | Morphing + Wipe + Shared | 12 |
 | Graphics tree + Chart + Orbital | 12 |
 | Wow (optional) | 3 |
 | Performance + our apps | 8 |
-| Q&A | 5–10 |
+| Q&A + thank you | 5–10 |
