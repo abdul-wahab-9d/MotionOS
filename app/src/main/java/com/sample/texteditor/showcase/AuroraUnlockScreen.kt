@@ -44,10 +44,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.NativePaint
 import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -74,17 +71,8 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Aurora Unlock — cinematic Compose animation showcase.
  *
- * Techniques (domgeorg-style production patterns):
- * - Shared `withFrameNanos` clock driving orbit trails (ArrayDeque ring buffers)
- * - Hold-to-charge gesture + `Animatable` spring settle / overshoot
- * - `updateTransition` coordinated multi-property state machine
- * - Canvas + PathMeasure progressive checkmark reveal (smoothstep)
- * - BlurMaskFilter glow via `drawIntoCanvas` (no recomposition tax)
- * - Single-fraction stagger for unlock chips (`lead` / `lag` time remap)
- * - `graphicsLayer` for alpha/scale — animation stays off the composition path
- *
- * Film this for LinkedIn: hold the core → charge fills → release into unlock.
- * Drop this file into any Compose project or publish as a gist.
+ * Shared `withFrameNanos` clock, hold-to-charge `Animatable`, `updateTransition`,
+ * orbit trails, and BlurMaskFilter glow. Hold the core to unlock.
  */
 
 @Stable
@@ -288,7 +276,6 @@ fun AuroraUnlockScreen(modifier: Modifier = Modifier) {
             AuroraCore(
                 clock = clock,
                 charge = charge.value,
-                unlockProgress = unlockT.value,
                 burst = burst.value,
                 phase = phase,
                 modifier = Modifier
@@ -386,7 +373,6 @@ private fun UnlockChips(reveal: Float, visible: Boolean) {
 private fun AuroraCore(
     clock: Float,
     charge: Float,
-    unlockProgress: Float,
     burst: Float,
     phase: AuroraPhase,
     modifier: Modifier = Modifier,
@@ -510,30 +496,6 @@ private fun AuroraCore(
                     radius = br * 0.78f,
                     style = Stroke(width = lerp(6f, 1f, burst)),
                 )
-            }
-
-            // PathMeasure checkmark on unlock
-            if (phase == AuroraPhase.Unlocking || phase == AuroraPhase.Unlocked) {
-                val t = smoothstep(lag(unlockProgress))
-                val path = Path().apply {
-                    val s = R * 0.55f
-                    moveTo(c.x - s * 0.42f, c.y + s * 0.02f)
-                    lineTo(c.x - s * 0.08f, c.y + s * 0.38f)
-                    lineTo(c.x + s * 0.48f, c.y - s * 0.36f)
-                }
-                val measure = PathMeasure().apply { setPath(path, false) }
-                val segment = Path()
-                if (measure.getSegment(0f, measure.length * t, segment, true)) {
-                    drawPath(
-                        path = segment,
-                        color = Success,
-                        style = Stroke(
-                            width = 7f,
-                            cap = StrokeCap.Round,
-                            join = StrokeJoin.Round,
-                        ),
-                    )
-                }
             }
         }
     }

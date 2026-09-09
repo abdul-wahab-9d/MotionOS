@@ -86,7 +86,7 @@ private data class GalleryItem(
 )
 
 private val GalleryItems = listOf(
-    GalleryItem("1", "Aurora Ring", "PathMeasure + glow", Color(0xFF22D3EE)),
+    GalleryItem("1", "Aurora Ring", "shared clock + glow", Color(0xFF22D3EE)),
     GalleryItem("2", "Spring Steer", "Animatable physics", Color(0xFFF472B6)),
     GalleryItem("3", "Morph Button", "updateTransition", Color(0xFFA3E635)),
     GalleryItem("4", "Neon Trail", "withFrameNanos", Color(0xFFA78BFA)),

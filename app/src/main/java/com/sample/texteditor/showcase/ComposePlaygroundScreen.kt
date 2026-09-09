@@ -86,7 +86,7 @@ private val Demos = listOf(
     DemoEntry(
         id = "aurora_unlock",
         title = "Aurora Unlock",
-        subtitle = "Animatable · springs · PathMeasure · withFrameNanos",
+        subtitle = "Animatable · springs · shared clock · withFrameNanos",
         section = "Advanced Transitions",
         reusable = false,
         icon = Icons.Outlined.AutoAwesome,

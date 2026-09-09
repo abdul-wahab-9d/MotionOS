@@ -263,7 +263,7 @@ internal fun ExcessChooser(modifier: Modifier = Modifier) {
         ExcessCard(
             kicker = "A · CINEMATIC UI",
             title = "Aurora Unlock",
-            body = "Hold the core. Animatable, springs, PathMeasure, shared clock.",
+            body = "Hold the core. Animatable, springs, shared clock.",
             modifier = Modifier.weight(1f),
             onClick = { PortraitDemoActivity.open(context, PortraitDemoActivity.DEMO_AURORA) },
         )
@@ -286,7 +286,7 @@ private fun CodeBody(kind: SlideKind.Code, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "CODE",
+            text = "PSEUDOCODE",
             color = TalkInk.Amber,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
@@ -302,32 +302,43 @@ private fun CodeBody(kind: SlideKind.Code, modifier: Modifier = Modifier) {
         Spacer(Modifier.height(20.dp))
         Column(
             Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color(0xFF020617))
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(3.dp),
+                .padding(horizontal = 24.dp, vertical = 22.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             kind.lines.forEachIndexed { i, line ->
                 if (line.isEmpty()) {
-                    Spacer(Modifier.height(6.dp))
+                    Spacer(Modifier.height(8.dp))
                 } else {
                     Text(
                         text = line,
                         color = if (i in kind.accentLines) TalkInk.Lime else TalkInk.Mute,
                         fontFamily = FontFamily.Monospace,
-                        fontSize = 14.sp,
+                        fontSize = 18.sp,
                         fontWeight = if (i in kind.accentLines) FontWeight.SemiBold else FontWeight.Normal,
-                        lineHeight = 20.sp,
+                        lineHeight = 26.sp,
                     )
                 }
             }
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(18.dp))
         Text(
-            text = "Navigate here with  goTo(\"${kind.label.substringBefore(" —").lowercase().replace(" ", "_")}\")  · advance to resume",
-            color = TalkInk.Dim,
-            fontSize = 12.sp,
+            text = "Full source in Android Studio",
+            color = TalkInk.Cyan,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.SemiBold,
         )
+        if (kind.studioFile.isNotEmpty()) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = "app/.../${kind.studioFile}",
+                color = TalkInk.Mute,
+                fontFamily = FontFamily.Monospace,
+                fontSize = 14.sp,
+            )
+        }
     }
 }
 

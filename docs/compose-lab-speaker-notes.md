@@ -122,6 +122,8 @@ Need motion?
 
 **Team hook:** “Pay / save / sync actions in our apps.”
 
+**Next slide (pseudocode):** Don’t read the file. Pattern only — then flip to Android Studio → `MorphingActionButton.kt`.
+
 **30‑min:** Keep this demo.
 
 ---
@@ -134,6 +136,8 @@ Need motion?
 > Springs are great until you need a *story*: race ahead, overshoot, settle. That’s `keyframes`. We clip with `clipRect` so dark theme reveals as a wipe — animation drives a drawing primitive.
 
 **Call out:** `Animatable` + `keyframes { … at … using easing }`, `drawWithContent` / `clipRect`.
+
+**Next slide (pseudocode):** Don’t read the file. Pattern only — then flip to Android Studio → `KeyframesThemeWipeDemo.kt`. Steal `clipToFraction`.
 
 **30‑min:** Keep if time; else show 15s recording.
 
@@ -195,6 +199,8 @@ Custom drawing or layout?
 
 **Team hook:** wallet / stories / picker — not a circle of letter-dots.
 
+**Next slide (pseudocode):** Don’t read the file. Pattern only — then flip to Android Studio → `OrbitalMenuLayoutDemo.kt`. Call out: `zIndex` is placement, `graphicsLayer` is depth.
+
 **30‑min:** Keep this demo.
 
 ---
@@ -202,7 +208,7 @@ Custom drawing or layout?
 ## Slide 14 — Optional wow *(60‑min only, pick ONE, ~3 min)*
 
 **A — Aurora Unlock:** tap card → portrait activity. Rotate the emulator. Hold core.  
-> Imperative `Animatable`, springs, shared clock orbits, PathMeasure seal.
+> Imperative `Animatable`, springs, shared clock orbits.
 
 **B — Neon Rush:** tap card → portrait activity. Rotate the emulator. Tap to race.  
 > `withFrameNanos` game loop — same Canvas primitives, real-time simulation. Cool, but not default product UI.

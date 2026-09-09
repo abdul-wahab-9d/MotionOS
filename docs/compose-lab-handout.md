@@ -85,7 +85,7 @@ Place children yourself? → custom Layout  │  Measure depends on content? →
 | `SharedElementGalleryDemo.kt` | Shared elements |
 | `CanvasPulseChartDemo.kt` | DrawScope charts |
 | `OrbitalMenuLayoutDemo.kt` | Custom `Layout` fan deck |
-| `AuroraUnlockScreen.kt` | `Animatable` + PathMeasure |
+| `AuroraUnlockScreen.kt` | `Animatable` + shared clock |
 | `NeonRushGame.kt` | Canvas game loop |
 
-*Print or pin this page during the talk. Decision trees > memorizing APIs.*
+Code slides in the deck are **pseudocode**. Open the files above in Android Studio for the real source.
