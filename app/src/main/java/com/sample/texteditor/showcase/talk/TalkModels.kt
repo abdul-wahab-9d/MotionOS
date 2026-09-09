@@ -515,8 +515,8 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             phase = TalkPhase.Ship,
             layout = SlideLayout.Full,
             kicker = "OUR APPS",
-            title = "Fill this with the room",
-            notes = "Capture 2–3 real tickets. Canvas only when components can’t express the design.",
+            title = "Motion moments → right API",
+            notes = "Tap chips to reveal — capture 2–3 real tickets with the room. Canvas only when components can’t express the design.",
             kind = SlideKind.Apply,
         ),
         DeckSlide(
@@ -525,13 +525,13 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             layout = SlideLayout.Full,
             kicker = "LEAVE-BEHIND",
             title = "The lab is this repo",
-            notes = "Lab files map 1:1 to demos today.",
+            notes = "Lab files map 1:1 to demos today. Clicker: volume ↓ / D-pad / space — next slide.",
             kind = SlideKind.Beats(
                 bullets = listOf(
                     "Compose Lab → app/.../showcase/",
                     "Handout → docs/compose-lab-handout.md",
-                    "Android docs: Shared elements, Animation",
-                    "Volume down / D-pad / space — next slide",
+                    "PDF deck → docs/talk/compose-motion-pixels.pdf",
+                    "github.com/abdul-wahab-9d/MotionOS",
                 ),
                 footnote = "No tablet? Phone layout is a tap-through lab.",
             ),
