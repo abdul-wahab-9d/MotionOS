@@ -2,6 +2,8 @@
 
 **Talk:** Choosing the right Compose animation & graphics API · **Lab:** run the app — tablet = Motion OS deck, phone = Compose Lab
 
+**Share a PDF:** open `docs/talk/index.html` in Chrome → Ctrl+P → Landscape · Margins None · Background graphics On → Save as PDF.
+
 ---
 
 ## Animation — pick an API

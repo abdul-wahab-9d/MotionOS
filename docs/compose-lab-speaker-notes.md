@@ -9,6 +9,7 @@
 - Tablet landscape (or Pixel Tablet AVD); Motion OS opens as the deck
 - Clicker: volume / D-pad / space. Notes key: N
 - Backup: 20–30s screen recordings of each demo
+- Leave-behind PDF: `docs/talk/index.html` → Chrome Print → Save as PDF (Landscape, no margins, background graphics)
 
 ---
 
