@@ -3,3 +3,6 @@
 /app/build/
 /.kotlin/
 /local.properties
+
+# Cursor IDE rules (local-only)
+.cursor/rules/
