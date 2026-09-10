@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.BubbleChart
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.DirectionsCar
 import androidx.compose.material.icons.outlined.Hub
+import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +57,15 @@ private data class DemoEntry(
 )
 
 private val Demos = listOf(
+    DemoEntry(
+        id = "animated_visibility",
+        title = "Animated Visibility Basics",
+        subtitle = "AnimatedVisibility · Enter/Exit combos",
+        section = "Advanced Transitions",
+        reusable = false,
+        icon = Icons.Outlined.Visibility,
+        accent = Color(0xFF60A5FA),
+    ),
     DemoEntry(
         id = "shared_elements",
         title = "Shared Element Gallery",
@@ -243,6 +253,9 @@ fun PlaygroundDemoHost(
 ) {
     when (demoId) {
         null -> ComposePlaygroundScreen(onOpenDemo = {}, modifier = modifier)
+        "animated_visibility" -> DemoScaffold("Animated Visibility", onBack, modifier) {
+            AnimatedVisibilityDemo()
+        }
         "shared_elements" -> DemoScaffold("Shared Elements", onBack, modifier) {
             SharedElementGalleryDemo()
         }

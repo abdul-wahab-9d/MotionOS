@@ -701,6 +701,182 @@ internal fun ApplyTable(modifier: Modifier = Modifier) {
     }
 }
 
+@Immutable
+private data class ComparisonRow(
+    val behavior: String,
+    val xmlApi: String,
+    val xmlParts: Int,
+    val composeApi: String,
+    val composeParts: Int,
+)
+
+private val ComparisonRows = listOf(
+    ComparisonRow(
+        behavior = "Show / hide",
+        xmlApi = "View.GONE ↔ VISIBLE + TransitionManager.beginDelayedTransition()",
+        xmlParts = 3,
+        composeApi = "AnimatedVisibility(visible) { … }",
+        composeParts = 1,
+    ),
+    ComparisonRow(
+        behavior = "Async button morph",
+        xmlApi = "AnimatorSet + 4× ObjectAnimator + AnimatorListener",
+        xmlParts = 7,
+        composeApi = "One updateTransition — every property chained off it",
+        composeParts = 1,
+    ),
+    ComparisonRow(
+        behavior = "Custom chart",
+        xmlApi = "Custom View + onDraw() + ValueAnimator + invalidate()",
+        xmlParts = 4,
+        composeApi = "Canvas { } + one Animatable read in the draw scope",
+        composeParts = 2,
+    ),
+    ComparisonRow(
+        behavior = "List → detail continuity",
+        xmlApi = "MotionScene XML + 2+ ConstraintSets + Transition tag",
+        xmlParts = 4,
+        composeApi = "SharedTransitionLayout + matching sharedElement keys",
+        composeParts = 2,
+    ),
+    ComparisonRow(
+        behavior = "Radial / fan picker",
+        xmlApi = "Custom ViewGroup: 3 constructors + onMeasure() + onLayout()",
+        xmlParts = 5,
+        composeApi = "One Layout { measurables, constraints -> … } block",
+        composeParts = 1,
+    ),
+    ComparisonRow(
+        behavior = "Screen ↔ screen transition",
+        xmlApi = "4 anim XML resources + 4 attrs — repeated on every <action> in the graph",
+        xmlParts = 4,
+        composeApi = "transitionSpec + popTransitionSpec on NavDisplay, once for the whole graph — predictive back is a built-in third parameter",
+        composeParts = 2,
+    ),
+)
+
+/**
+ * XML/View vs Compose — "moving parts" comparison, not a fabricated LOC count.
+ * Every number is a structural fact about how that API is designed to be used
+ * (an AnimatorSet genuinely needs a listener; a custom ViewGroup genuinely
+ * needs those constructors) — defensible from API knowledge alone, live.
+ */
+@Composable
+internal fun XmlVsComposeTable(modifier: Modifier = Modifier) {
+    var revealed by remember { mutableStateOf(List(ComparisonRows.size) { false }) }
+
+    fun reveal(i: Int) {
+        revealed = revealed.toMutableList().also { it[i] = true }
+    }
+
+    Column(modifier.fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth().padding(bottom = 10.dp, start = 8.dp, end = 8.dp)) {
+            Text(
+                "BEHAVIOR",
+                color = TalkInk.Dim,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.weight(0.24f),
+            )
+            Text(
+                "XML / VIEW — WHAT YOU WIRE TOGETHER",
+                color = TalkInk.Dim,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.weight(0.5f),
+            )
+            Text(
+                "COMPOSE  ·  tap to reveal",
+                color = TalkInk.Dim,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.5.sp,
+                modifier = Modifier.weight(0.26f),
+            )
+        }
+        ComparisonRows.forEachIndexed { i, row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(if (revealed[i]) Color.White.copy(alpha = 0.05f) else Color.Transparent)
+                    .clickable { reveal(i) }
+                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                verticalAlignment = Alignment.Top,
+            ) {
+                Text(
+                    text = row.behavior,
+                    color = TalkInk.Mist,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.weight(0.24f),
+                )
+                Row(
+                    modifier = Modifier.weight(0.5f).padding(end = 12.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    PartsBadge(count = row.xmlParts, color = TalkInk.Pink)
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = row.xmlApi,
+                        color = TalkInk.Mute,
+                        fontSize = 13.sp,
+                        lineHeight = 18.sp,
+                    )
+                }
+                if (revealed[i]) {
+                    Row(modifier = Modifier.weight(0.26f), verticalAlignment = Alignment.Top) {
+                        PartsBadge(count = row.composeParts, color = TalkInk.Cyan)
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = row.composeApi,
+                            color = TalkInk.Lime,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            lineHeight = 18.sp,
+                        )
+                    }
+                } else {
+                    Text(
+                        text = "tap →",
+                        color = TalkInk.Dim,
+                        fontSize = 13.sp,
+                        modifier = Modifier.weight(0.26f),
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(14.dp))
+        Text(
+            text = "Structural facts about each API's shape — not a specific implementation's line count.",
+            color = TalkInk.Dim,
+            fontSize = 12.sp,
+            modifier = Modifier.padding(horizontal = 8.dp),
+        )
+    }
+}
+
+@Composable
+private fun PartsBadge(count: Int, color: Color, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(999.dp))
+            .background(color.copy(alpha = 0.16f))
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+    ) {
+        Text(
+            text = count.toString(),
+            color = color,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Monospace,
+        )
+    }
+}
+
 @Composable
 internal fun DrawGridBackdrop(modifier: Modifier = Modifier) {
     Canvas(modifier.fillMaxSize()) {

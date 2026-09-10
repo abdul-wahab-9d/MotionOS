@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sample.texteditor.showcase.AnimatedVisibilityDemo
 import com.sample.texteditor.showcase.CanvasPulseChartDemo
 import com.sample.texteditor.showcase.KeyframesThemeWipeDemo
 import com.sample.texteditor.showcase.MorphingActionButtonDemo
@@ -51,6 +52,7 @@ internal fun SharedTransitionScope.TalkSlideBody(
         SlideKind.ApiCatalog -> ApiCatalogBody(slide, modifier)
         is SlideKind.Demo -> DemoCopy(slide, kind, visibilityScope, modifier)
         SlideKind.Excess -> ExcessChooser(modifier)
+        SlideKind.Comparison -> ComparisonBody(slide, modifier)
         SlideKind.Apply -> ApplyBody(slide, modifier)
         SlideKind.Qa -> QaBody(slide, modifier)
         SlideKind.Thanks -> ThankYouSlide(modifier)
@@ -235,6 +237,7 @@ private fun SharedTransitionScope.DemoCopy(
 internal fun TalkDemoStage(demoId: String, modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize().clip(RoundedCornerShape(20.dp)).background(TalkInk.Bg)) {
         when (demoId) {
+            "animated_visibility" -> AnimatedVisibilityDemo(Modifier.fillMaxSize().padding(top = 24.dp))
             "morphing_button" -> MorphingActionButtonDemo(Modifier.fillMaxSize().padding(top = 24.dp))
             "keyframes_wipe" -> KeyframesThemeWipeDemo(Modifier.fillMaxSize())
             "shared_elements" -> SharedElementGalleryDemo(Modifier.fillMaxSize())
@@ -395,6 +398,16 @@ private fun ExcessCard(
         Text(body, color = TalkInk.Mute, fontSize = 16.sp, lineHeight = 24.sp)
         Spacer(Modifier.height(24.dp))
         Text("Tap to open portrait  →", color = TalkInk.Cyan, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+@Composable
+private fun ComparisonBody(slide: DeckSlide, modifier: Modifier = Modifier) {
+    SlideColumn(modifier.padding(horizontal = 40.dp, vertical = 8.dp)) {
+        SlideHeading(slide)
+        Spacer(Modifier.height(12.dp))
+        XmlVsComposeTable()
+        Spacer(Modifier.height(12.dp))
     }
 }
 

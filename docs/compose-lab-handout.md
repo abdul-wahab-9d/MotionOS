@@ -10,7 +10,7 @@
 
 | Problem | API | Lab demo |
 |---------|-----|----------|
-| Show / hide | `AnimatedVisibility` | (baseline — not in lab) |
+| Show / hide | `AnimatedVisibility` | **Animated Visibility Basics** |
 | Swap screens / content | `AnimatedContent` | Shared Element (host) |
 | Many properties, one state | `updateTransition` | **Morphing Action Button** |
 | Imperative / cancel / sequence | `Animatable` | **Aurora Unlock**, **Theme Wipe** |
@@ -60,7 +60,7 @@ Place children yourself? → custom Layout  │  Measure depends on content? →
 
 ## Suggested live order (demo day)
 
-1. Morphing Button → 2. Theme Wipe → 3. Shared Elements → 4. Canvas Chart → 5. Fan Deck Layout → (optional) Aurora / Neon Rush
+1. Animated Visibility → 2. Morphing Button → 3. Theme Wipe → 4. Shared Elements → 5. Canvas Chart → 6. Fan Deck Layout → (optional) Aurora / Neon Rush
 
 ---
 
@@ -82,6 +82,7 @@ Place children yourself? → custom Layout  │  Measure depends on content? →
 
 | File | Topic |
 |------|--------|
+| `AnimatedVisibilityDemo.kt` | `AnimatedVisibility` Enter/Exit combos |
 | `components/MorphingActionButton.kt` | `updateTransition` (reusable) |
 | `KeyframesThemeWipeDemo.kt` | `keyframes` + clip wipe |
 | `SharedElementGalleryDemo.kt` | Shared elements |
