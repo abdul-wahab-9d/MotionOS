@@ -139,4 +139,3 @@ Apply before merging any custom motion:
 ## Additional resources
 
 - **[xml-to-compose-bridge.md](xml-to-compose-bridge.md)** — full XML/View → Compose animation translation table with code pairs.
-- **`android-compose-animation`** skill — deep production technique library (shimmer, `AnchoredDraggable`, shared-element bounds transforms, time remapping, shaders) once the API choice above is made.
