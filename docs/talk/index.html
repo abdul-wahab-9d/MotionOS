@@ -392,7 +392,7 @@
 <body>
   <div class="hud">
     <button type="button" id="prev">← Prev</button>
-    <span class="counter" id="counter">1 / 24</span>
+    <span class="counter" id="counter">1 / 26</span>
     <button type="button" id="next">Next →</button>
     <button type="button" class="primary" id="print">Print / Save PDF</button>
     <span class="hint">Print: Landscape is not enough — paper must be 13.33 × 7.5 in (or use the PDF in this folder) &nbsp;·&nbsp; ← → Space</span>
@@ -408,7 +408,7 @@
       <p class="presenter">Abdul Wahab</p>
       <p class="talk-date">September 2026</p>
       <p class="tag" style="margin-top:20px">This deck is one updateTransition. Every flourish names its API.</p>
-      <span class="page-num">01 / 24</span>
+      <span class="page-num">01 / 26</span>
     </section>
 
     <section class="slide" data-phase="map">
@@ -419,7 +419,7 @@
         <li><span class="n">2</span><span>When Canvas / custom Layout is actually worth it</span></li>
         <li><span class="n">3</span><span>Shared performance rules we can ship with</span></li>
       </ol>
-      <span class="page-num">02 / 24</span>
+      <span class="page-num">02 / 26</span>
     </section>
 
     <section class="slide" data-phase="map">
@@ -432,7 +432,7 @@
         <li><span class="n">4</span><span>Apply to our apps</span></li>
         <li><span class="n">5</span><span>Q&amp;A</span></li>
       </ol>
-      <span class="page-num">03 / 24</span>
+      <span class="page-num">03 / 26</span>
     </section>
 
     <section class="slide" data-phase="map">
@@ -445,7 +445,7 @@
         <li><span class="n">•</span><span>Games and Canvas are rare in product UI</span></li>
       </ul>
       <p class="footnote">Custom is for moments that sell the product.</p>
-      <span class="page-num">04 / 24</span>
+      <span class="page-num">04 / 26</span>
     </section>
 
     <section class="slide" data-phase="map">
@@ -463,7 +463,7 @@
         <div class="branch"><span class="pipe">├──</span><span>Per-frame draw / game?</span><span class="api">→  withFrameNanos + Canvas</span></div>
       </div>
       <p class="tree-note">Live app: tappable branches jump to proof. PDF: pattern only.</p>
-      <span class="page-num">05 / 24</span>
+      <span class="page-num">05 / 26</span>
     </section>
 
     <section class="slide" data-phase="map">
@@ -491,7 +491,7 @@
           <p class="spec-when">Use when: spinners, pulsing indicators (sparingly).<br>⚠ Not for hero UI — it fights user attention.</p>
         </article>
       </div>
-      <span class="page-num">06 / 24</span>
+      <span class="page-num">06 / 26</span>
     </section>
 
     <section class="slide" data-phase="map">
@@ -527,7 +527,51 @@
         </div>
         <p class="cat-foot">Not every function in androidx.compose.animation — the set we choose from. Tree picks; table names.</p>
       </div>
-      <span class="page-num">07 / 24</span>
+      <span class="page-num">07 / 26</span>
+    </section>
+
+    <section class="slide" data-phase="proof">
+      <div class="split">
+        <div>
+          <div class="kicker phase-proof">PROOF</div>
+          <h1 class="tight">AnimatedVisibility</h1>
+          <ul class="beats plain">
+            <li><span class="n">&bull;</span><span>One boolean. Enter plays in, Exit plays out.</span></li>
+            <li><span class="n">&bull;</span><span>Combine transitions with <code>+</code> &mdash; fadeIn() + expandVertically().</span></li>
+            <li><span class="n">&bull;</span><span>Error banners, optional fields, tooltips &mdash; this is most of our motion.</span></li>
+          </ul>
+          <div class="chips">
+            <span class="chip">AnimatedVisibility</span>
+            <span class="chip">EnterTransition</span>
+            <span class="chip">ExitTransition</span>
+          </div>
+          <div class="code mono">
+            <div class="ln hi">AnimatedVisibility(visible = state) {</div>
+            <div class="ln">  Card { /* content */ }</div>
+            <div class="ln">}</div>
+          </div>
+        </div>
+        <aside class="stage">
+          <div class="sk">THREE ENTER / EXIT PAIRS</div>
+          <div class="state-flow" style="flex-direction:column;gap:8px">
+            <div class="state-box active">
+              <div class="s-name">fadeIn() + fadeOut()</div>
+              <div class="s-sub">opacity only &middot; smooth swap</div>
+            </div>
+            <div class="state-box">
+              <div class="s-name">slideIn + slideOut</div>
+              <div class="s-sub">directional &middot; toolbars, banners</div>
+            </div>
+            <div class="state-box">
+              <div class="s-name">expandVertically + shrinkVertically</div>
+              <div class="s-sub">optional fields, error messages</div>
+            </div>
+          </div>
+          <div class="diagram-insight">Combine with <code>+</code>: <code>fadeIn() + expandVertically()</code> gives both at once</div>
+          <p class="path mono" style="margin-top:16px">showcase/AnimatedVisibilityDemo.kt</p>
+        </aside>
+      </div>
+      <span class="page-num">08 / 26</span>
     </section>
 
     <section class="slide" data-phase="proof">
@@ -577,7 +621,7 @@
           <p class="path mono" style="margin-top:16px">showcase/components/MorphingActionButton.kt</p>
         </aside>
       </div>
-      <span class="page-num">08 / 24</span>
+      <span class="page-num">09 / 26</span>
     </section>
 
     <section class="slide code-slide" data-phase="proof">
@@ -596,7 +640,7 @@
         <div class="l1">Full source in Android Studio</div>
         <div class="l2 mono">app/.../showcase/components/MorphingActionButton.kt</div>
       </div>
-      <span class="page-num">09 / 24</span>
+      <span class="page-num">10 / 26</span>
     </section>
 
     <section class="slide" data-phase="proof">
@@ -645,7 +689,7 @@
           <p class="path mono" style="margin-top:16px">showcase/KeyframesThemeWipeDemo.kt</p>
         </aside>
       </div>
-      <span class="page-num">10 / 24</span>
+      <span class="page-num">11 / 26</span>
     </section>
 
     <section class="slide code-slide" data-phase="proof">
@@ -665,7 +709,7 @@
         <div class="l1">Full source in Android Studio</div>
         <div class="l2 mono">app/.../showcase/KeyframesThemeWipeDemo.kt</div>
       </div>
-      <span class="page-num">11 / 24</span>
+      <span class="page-num">12 / 26</span>
     </section>
 
     <section class="slide" data-phase="proof">
@@ -712,7 +756,7 @@
           <p class="path mono" style="margin-top:16px">showcase/SharedElementGalleryDemo.kt</p>
         </aside>
       </div>
-      <span class="page-num">12 / 24</span>
+      <span class="page-num">13 / 26</span>
     </section>
 
     <section class="slide" data-phase="draw">
@@ -726,7 +770,7 @@
         <div class="branch"><span class="pipe">├──</span><span>Deferred / dependent measure?</span><span class="api mute">→  SubcomposeLayout</span></div>
       </div>
       <p class="tree-note">Canvas is not a layout system. Layout is not a drawing API.</p>
-      <span class="page-num">13 / 24</span>
+      <span class="page-num">14 / 26</span>
     </section>
 
     <section class="slide" data-phase="draw">
@@ -764,7 +808,7 @@
           <p class="path mono" style="margin-top:16px">showcase/CanvasPulseChartDemo.kt</p>
         </aside>
       </div>
-      <span class="page-num">14 / 24</span>
+      <span class="page-num">15 / 26</span>
     </section>
 
     <section class="slide" data-phase="layout">
@@ -804,7 +848,7 @@
           <p class="path mono" style="margin-top:16px">showcase/OrbitalMenuLayoutDemo.kt</p>
         </aside>
       </div>
-      <span class="page-num">15 / 24</span>
+      <span class="page-num">16 / 26</span>
     </section>
 
     <section class="slide code-slide" data-phase="layout">
@@ -825,7 +869,7 @@
         <div class="l1">Full source in Android Studio</div>
         <div class="l2 mono">app/.../showcase/OrbitalMenuLayoutDemo.kt</div>
       </div>
-      <span class="page-num">16 / 24</span>
+      <span class="page-num">17 / 26</span>
     </section>
 
     <section class="slide" data-phase="excess">
@@ -843,7 +887,69 @@
           <p>withFrameNanos racer. Same Canvas primitives. Not default product UI.</p>
         </article>
       </div>
-      <span class="page-num">17 / 24</span>
+      <span class="page-num">18 / 26</span>
+    </section>
+
+    <section class="slide" data-phase="map">
+      <div class="kicker phase-map">WHY COMPOSE</div>
+      <h1 class="tight">Same behavior. Fewer moving parts.</h1>
+      <table class="apply">
+        <thead>
+          <tr>
+            <th>BEHAVIOR</th>
+            <th>XML / VIEW</th>
+            <th style="text-align:center;width:56px">PARTS</th>
+            <th>COMPOSE</th>
+            <th style="text-align:center;width:56px">PARTS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Show / hide</td>
+            <td class="api mono">View.GONE&harr;VISIBLE + TransitionManager</td>
+            <td style="text-align:center;color:var(--pink)">3</td>
+            <td class="api mono">AnimatedVisibility(visible) { }</td>
+            <td style="text-align:center;color:var(--lime)">1</td>
+          </tr>
+          <tr>
+            <td>Async button morph</td>
+            <td class="api mono">AnimatorSet + 4&times; ObjectAnimator + Listener</td>
+            <td style="text-align:center;color:var(--pink)">7</td>
+            <td class="api mono">updateTransition &mdash; every property chained</td>
+            <td style="text-align:center;color:var(--lime)">1</td>
+          </tr>
+          <tr>
+            <td>Custom chart</td>
+            <td class="api mono">Custom View + onDraw() + ValueAnimator</td>
+            <td style="text-align:center;color:var(--pink)">4</td>
+            <td class="api mono">Canvas { } + one Animatable</td>
+            <td style="text-align:center;color:var(--lime)">2</td>
+          </tr>
+          <tr>
+            <td>List &rarr; detail continuity</td>
+            <td class="api mono">MotionScene + 2+ ConstraintSets + Transition tag</td>
+            <td style="text-align:center;color:var(--pink)">4</td>
+            <td class="api mono">SharedTransitionLayout + matching keys</td>
+            <td style="text-align:center;color:var(--lime)">2</td>
+          </tr>
+          <tr>
+            <td>Radial / fan picker</td>
+            <td class="api mono">Custom ViewGroup: constructors + onMeasure + onLayout</td>
+            <td style="text-align:center;color:var(--pink)">5</td>
+            <td class="api mono">One Layout { measurables &rarr; placeRelative } block</td>
+            <td style="text-align:center;color:var(--lime)">1</td>
+          </tr>
+          <tr>
+            <td>Screen transitions</td>
+            <td class="api mono">4 anim XML + 4 attrs on every graph &lt;action&gt;</td>
+            <td style="text-align:center;color:var(--pink)">4</td>
+            <td class="api mono">transitionSpec on NavDisplay &mdash; once for the graph</td>
+            <td style="text-align:center;color:var(--lime)">2</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="footnote">Moving parts = distinct objects to create, wire, and keep in sync. Not line counts.</p>
+      <span class="page-num">19 / 26</span>
     </section>
 
     <section class="slide" data-phase="ship">
@@ -857,7 +963,7 @@
         <li><span class="n">5</span><span>Shared elements: stable keys, small regions</span></li>
         <li><span class="n">6</span><span>Shaders / AGSL: API guards + fallbacks</span></li>
       </ol>
-      <span class="page-num">18 / 24</span>
+      <span class="page-num">20 / 26</span>
     </section>
 
     <section class="slide" data-phase="ship">
@@ -877,7 +983,7 @@
         </tbody>
       </table>
       <p class="footnote">Canvas / Layout only when Material + standard animation can’t express the design.</p>
-      <span class="page-num">19 / 24</span>
+      <span class="page-num">21 / 26</span>
     </section>
 
     <section class="slide" data-phase="ship">
@@ -886,11 +992,11 @@
       <ol class="beats">
         <li><span class="n">1</span><span>Compose Lab → app/.../showcase/</span></li>
         <li><span class="n">2</span><span>Handout → docs/compose-lab-handout.md</span></li>
-        <li><span class="n">3</span><span>This PDF deck → docs/talk/index.html</span></li>
+        <li><span class="n">3</span><span>PDF deck → docs/talk/compose-motion-pixels.pdf</span></li>
         <li><span class="n">4</span><span>github.com/abdul-wahab-9d/MotionOS</span></li>
       </ol>
       <p class="footnote">No tablet? Phone layout is a tap-through lab.</p>
-      <span class="page-num">20 / 24</span>
+      <span class="page-num">22 / 26</span>
     </section>
 
     <section class="slide" data-phase="ship">
@@ -941,7 +1047,7 @@
           <div class="qref-perf"><span class="qref-no">✕</span>infinite transitions in hero UI</div>
         </div>
       </div>
-      <span class="page-num">21 / 24</span>
+      <span class="page-num">23 / 26</span>
     </section>
     <section class="slide" data-phase="ship">
       <div class="kicker phase-ship">Q&amp;A</div>
@@ -959,7 +1065,7 @@ Who wants a follow-up on Nav + shared elements?</p>
           <p>Visibility you know. Custom means Animatable + a spec. Story timing is keyframes. Physics is spring. Continuity across screens is shared elements.</p>
         </article>
       </div>
-      <span class="page-num">22 / 24</span>
+      <span class="page-num">24 / 26</span>
     </section>
 
     <section class="slide thanks" data-phase="close">
@@ -975,7 +1081,7 @@ Who wants a follow-up on Nav + shared elements?</p>
         <span class="chip">Canvas</span>
         <span class="chip">Layout</span>
       </div>
-      <span class="page-num">23 / 24</span>
+      <span class="page-num">25 / 26</span>
     </section>
 
     <section class="slide" data-phase="ship">
@@ -988,7 +1094,7 @@ Who wants a follow-up on Nav + shared elements?</p>
         <li><span class="n">4</span><span>Clicker: volume / D-pad / space · notes: N</span></li>
       </ol>
       <p class="footnote">Demos in this PDF are stills. The motion lives in the app.</p>
-      <span class="page-num">24 / 24</span>
+      <span class="page-num">26 / 26</span>
     </section>
 
   </main>
