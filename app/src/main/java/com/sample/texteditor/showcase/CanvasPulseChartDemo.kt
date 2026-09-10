@@ -42,6 +42,8 @@ import kotlin.math.sin
  */
 @Composable
 fun CanvasPulseChartDemo(modifier: Modifier = Modifier) {
+    // One Animatable drives both charts. They scale proportionally so the bars never finish
+    // before the sparkline, keeping the reveal feeling intentional rather than coincidental.
     val reveal = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
         reveal.animateTo(1f, tween(1400, easing = FastOutSlowInEasing))
@@ -127,6 +129,8 @@ fun CanvasPulseChartDemo(modifier: Modifier = Modifier) {
                 drawPath(
                     path = area,
                     brush = Brush.verticalGradient(
+                        // The alpha is `0.35f * t` so the fill gradient fades in with the reveal —
+                        // constant alpha would let the audience see the empty area before the line draws.
                         listOf(Color(0xFF22D3EE).copy(alpha = 0.35f * t), Color.Transparent),
                     ),
                 )
@@ -175,6 +179,9 @@ fun CanvasPulseChartDemo(modifier: Modifier = Modifier) {
 
             bars.forEachIndexed { i, value ->
                 val h = maxH * value * FastOutSlowInEasing.transform(
+                    // Shift each bar's local time window by i * 0.06 so bar 0 starts first.
+                    // No coroutines or LaunchedEffects needed — stagger is pure math on the
+                    // global reveal fraction.
                     ((t - i * 0.06f) / 0.7f).coerceIn(0f, 1f),
                 )
                 val left = padX + i * (barW + gap)

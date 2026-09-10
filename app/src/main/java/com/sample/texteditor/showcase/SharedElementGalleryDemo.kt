@@ -53,6 +53,9 @@ import androidx.compose.ui.unit.sp
 fun SharedElementGalleryDemo(modifier: Modifier = Modifier) {
     var selected by remember { mutableStateOf<GalleryItem?>(null) }
 
+    // SharedTransitionLayout must be the common ancestor of BOTH list and detail.
+    // The shared-element keys only resolve within one SharedTransitionLayout scope —
+    // wrapping list and detail in separate layouts would produce two unrelated scopes and no morph.
     SharedTransitionLayout(modifier = modifier.fillMaxSize()) {
         AnimatedContent(
             targetState = selected,
@@ -127,6 +130,8 @@ private fun GalleryList(
             contentPadding = PaddingValues(bottom = 24.dp),
         ) {
             items(GalleryItems, key = { it.id }) { item ->
+                // Stable keys are required: without them LazyColumn recycles composables on
+                // scroll and the shared-element state attached to each item would be lost.
                 with(sharedTransitionScope) {
                     Row(
                         modifier = Modifier
@@ -184,6 +189,8 @@ private fun GalleryDetail(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: androidx.compose.animation.AnimatedVisibilityScope,
 ) {
+    // `with(sharedTransitionScope)` brings sharedElement() into scope as a Modifier extension.
+    // The detail screen needs the same scope reference as the list to link matching keys.
     with(sharedTransitionScope) {
         Column(
             modifier = Modifier
@@ -226,7 +233,7 @@ private fun GalleryDetail(
                 Spacer(Modifier.height(20.dp))
                 Text(
                     text = "SharedTransitionLayout links matching keys across list and detail. " +
-                        "Tap anywhere to go back.",
+                            "Tap anywhere to go back.",
                     color = Color(0xFFCBD5E1),
                     fontSize = 14.sp,
                     lineHeight = 20.sp,

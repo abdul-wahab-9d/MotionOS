@@ -66,6 +66,8 @@ private val VisibilitySpecs = listOf(
     ),
     VisibilitySpec(
         label = "Expand",
+        // `+` is operator fun EnterTransition.plus(EnterTransition): EnterTransition.
+        // Both transitions run simultaneously — expand reserves layout space while fade handles alpha.
         enter = fadeIn(tween(220)) + expandVertically(tween(320)),
         exit = fadeOut(tween(160)) + shrinkVertically(tween(280)),
         hint = "expandVertically() — animates height, pushes siblings",
@@ -158,6 +160,9 @@ fun AnimatedVisibilityDemo(modifier: Modifier = Modifier) {
             visible = visible,
             enter = selected.enter,
             exit = selected.exit,
+            // AnimatedVisibility keeps the content in the composition tree for the full duration
+            // of Enter and Exit. Unlike View.GONE (which removes the view immediately), the
+            // composable stays alive — no manual "don't remove until animation ends" bookkeeping.
         ) {
             Column(
                 modifier = Modifier

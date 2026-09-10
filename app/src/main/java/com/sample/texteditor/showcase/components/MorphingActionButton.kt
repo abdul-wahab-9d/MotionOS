@@ -103,6 +103,9 @@ fun MorphingActionButton(
     height: Dp = 56.dp,
     colors: MorphingActionButtonColors = MorphingActionButtonColors(),
 ) {
+    // updateTransition instead of N × animateXAsState: all properties share one state machine,
+    // so their specs can reference the *from* state (e.g. Idle→Loading uses tween, everything
+    // else uses spring). With separate animateXAsState there is no "from" state available.
     val transition = updateTransition(targetState = state, label = "morphing_action")
 
     val width by transition.animateDp(
@@ -148,7 +151,8 @@ fun MorphingActionButton(
         }
     }
 
-    // Structure leads; label trails 120ms for cinematic feel
+    // Shape morphs first; label trails 120 ms behind for a cinematic "structure leads" feel.
+    // Reversing the delay (label leads, shape follows) breaks the illusion — try it.
     val idleTextAlpha by transition.animateFloat(
         transitionSpec = { tween(180, delayMillis = 120) },
         label = "idleText",
@@ -224,6 +228,8 @@ fun MorphingActionButton(
                 color = colors.loadingAccent,
                 modifier = Modifier
                     .size(28.dp)
+                    // graphicsLayer alpha skips recomposition — only the RenderNode is updated
+                    // each frame. Using Modifier.alpha() here would recompose the whole Button.
                     .graphicsLayer {
                         alpha = if (state == ActionButtonState.Loading) 1f else 0f
                     },
@@ -266,6 +272,8 @@ private fun LoadingOrbit(
     var angle by remember { mutableFloatStateOf(0f) }
     LaunchedEffect(Unit) {
         var last = 0L
+        // withFrameNanos suspends until the next Choreographer vsync and hands us the exact
+        // timestamp — unlike delay(16), it never drifts on 120 Hz or under GC pressure.
         withFrameNanos { last = it }
         while (true) {
             withFrameNanos { now ->
@@ -311,6 +319,8 @@ private fun ResultGlyph(
     modifier: Modifier = Modifier,
 ) {
     val tRaw = progress.coerceIn(0f, 1f)
+    // Smoothstep (cubic Hermite) instead of a linear t: we're inside a Canvas draw call,
+    // not a Compose animation, so there is no easing parameter available here.
     val t = tRaw * tRaw * (3f - 2f * tRaw) // smoothstep
 
     Canvas(modifier) {

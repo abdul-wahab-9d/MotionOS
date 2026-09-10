@@ -55,6 +55,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Closing card — one entrance clock, letter cascade, PathMeasure signature,
@@ -75,7 +76,7 @@ internal fun ThankYouSlide(modifier: Modifier = Modifier) {
             val letters = launch {
                 enter.animateTo(1f, tween(1500, easing = Cinematic))
             }
-            delay(720)
+            delay(720.milliseconds)
             name.animateTo(
                 1f,
                 spring(

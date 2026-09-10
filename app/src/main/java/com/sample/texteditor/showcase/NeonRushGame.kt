@@ -132,6 +132,8 @@ fun NeonRushGame(modifier: Modifier = Modifier) {
         if (phase != RushPhase.Playing) return
         val target = lane.coerceIn(0, laneCount - 1).toFloat()
         scope.launch {
+            // On tap: spring to the exact lane. Spring on release gives the "settle" feel;
+            // tween would arrive exactly on time but feel mechanical by comparison.
             playerLane.animateTo(
                 target,
                 spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = 450f),
@@ -160,10 +162,14 @@ fun NeonRushGame(modifier: Modifier = Modifier) {
 
         var last = 0L
         var spawnAcc = 0f
+        // withFrameNanos suspends until the next Choreographer vsync — unlike while(true)+delay(16),
+        // it works correctly on 90 Hz and 120 Hz screens and never drifts under GC pressure.
         withFrameNanos { last = it }
 
         while (phase == RushPhase.Playing) {
             withFrameNanos { now ->
+                // Clamp dt to 50 ms: if the app is backgrounded or the GC pauses, dt can spike
+                // to 300 ms+, teleporting rivals and causing false collisions. 50 ms = max lurch.
                 val dt = ((now - last) / 1_000_000_000f).coerceIn(0f, 0.05f)
                 last = now
                 frameTick++
@@ -358,6 +364,8 @@ private fun RushTrack(
     laneX: (Float, Float, Float, Float) -> Float,
 ) {
     Canvas(modifier = Modifier.fillMaxSize()) {
+        // Reading `tick` here makes Compose treat it as a state read — the Canvas redraws
+        // every game tick even when no other state observed inside DrawScope changed.
         @Suppress("UNUSED_EXPRESSION")
         tick // keep draw tied to game clock
 
