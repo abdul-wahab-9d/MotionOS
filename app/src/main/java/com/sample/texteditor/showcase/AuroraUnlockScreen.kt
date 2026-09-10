@@ -124,7 +124,9 @@ fun AuroraUnlockScreen(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     var chargeJob by remember { mutableStateOf<Job?>(null) }
 
-    // Shared clock — one progress drives all orbit trails
+    // One shared clock for every orbit trail. If each Orbiter had its own LaunchedEffect clock
+    // they would start at different millisecond offsets and drift apart over time.
+    // A single value keeps all four trails phase-coherent from the first frame.
     var clock by remember { mutableFloatStateOf(0f) }
     LaunchedEffect(Unit) {
         val start = withFrameNanos { it }
@@ -150,13 +152,17 @@ fun AuroraUnlockScreen(modifier: Modifier = Modifier) {
         chargeJob?.cancel()
         phase = AuroraPhase.Charging
         chargeJob = scope.launch {
-            // Fill to 1 over ~1.35s with cinematic ease feel via continuous animateTo
+            // tween(1350) fills at a fixed rate while the finger is held.
+            // On release, endCharge switches to a spring — the hand-off from driven to physics
+            // makes the rebound feel organic rather than a mirrored tween running backward.
             charge.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(1350, easing = FastOutSlowInEasing),
             )
             if (charge.value >= 0.995f) {
                 phase = AuroraPhase.Armed
+                // burst is a separate Animatable because it fires once at full charge and plays
+                // independently. Deriving it from charge would force it to reverse when charge drops.
                 burst.snapTo(0f)
                 burst.animateTo(1f, tween(420, easing = Cinematic))
                 delay(90.milliseconds)
@@ -299,7 +305,10 @@ fun AuroraUnlockScreen(modifier: Modifier = Modifier) {
                 color = Mist,
                 fontSize = 13.sp,
                 letterSpacing = 2.sp,
-                modifier = Modifier.graphicsLayer { alpha = hintAlpha * 0.65f },
+            // graphicsLayer writes directly to the RenderNode — alpha changes skip recomposition
+            // of Text layout. Since hintAlpha can update every frame during the transition,
+            // Modifier.alpha() here would cause unnecessary Text remeasure on every frame.
+            modifier = Modifier.graphicsLayer { alpha = hintAlpha * 0.65f },
             )
 
             Spacer(Modifier.height(28.dp))

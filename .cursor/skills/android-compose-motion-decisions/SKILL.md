@@ -4,6 +4,8 @@ description: |
   Team decision framework for choosing the right Jetpack Compose animation, graphics, or layout API — distilled from the "Compose Motion & Pixels" team talk (MotionOS repo: github.com/abdul-wahab-9d/MotionOS). Covers when NOT to animate, the animation decision tree (AnimatedVisibility / AnimatedContent / updateTransition / Animatable / spring / keyframes / SharedTransitionLayout / Canvas frame loop), the graphics & layout decision tree (Modifier vs Canvas vs custom Layout), a spec-intent cheat sheet, a performance checklist, and an XML/View-animation → Compose translation table for developers who have only worked in XML.
 
   USE THIS SKILL whenever a request involves adding or reviewing motion/animation/custom drawing in Compose, especially for developers coming from XML views. Trigger on: "add animation", "should this animate", "which animation API", "animate this button/screen", "morph a button", "loading state animation", "shared element transition", "list to detail transition", "custom chart in Compose", "custom Layout in Compose", "coming from XML animations", "ObjectAnimator to Compose", "MotionLayout to Compose", "ValueAnimator equivalent in Compose", "how do I animate this in Compose".
+
+  Always search official documentation to find the recommended APIs for Animations in Compose before locking an implementation choice.
 ---
 
 # Compose Motion — Team Decision Framework
@@ -17,6 +19,17 @@ Live reference implementations for every decision below exist in the MotionOS re
 (`app/src/main/java/com/sample/texteditor/showcase/`, `github.com/abdul-wahab-9d/MotionOS`) —
 open the file named in each row for the real, working source. Code shown here is illustrative
 only, not copy-paste-complete.
+
+## 0. Always check official docs first
+
+**Always search official documentation to find the recommended APIs for Animations in Compose.**
+
+Do this before locking a choice from the trees below, and again when an API feels ambiguous or may have changed:
+
+1. Search / open current Android developer docs for Jetpack Compose animation (e.g. [Animation](https://developer.android.com/develop/ui/compose/animation), [Animation overview](https://developer.android.com/develop/ui/compose/animation/introduction), Shared element / continuity docs).
+2. Prefer the API the official docs recommend for that problem over training-data habit or outdated samples.
+3. Use this skill’s decision trees and MotionOS demos as the team’s *intent* map — confirm signatures, experimental flags, and replacement APIs against the docs of the Compose / BOM version this project actually uses.
+4. If docs and this skill disagree, follow the docs and note the mismatch.
 
 ## 1. Restraint first — decide whether to animate at all
 
@@ -138,5 +151,5 @@ Apply before merging any custom motion:
 
 ## Additional resources
 
+- Official docs — always search here first for recommended Compose animation APIs: [developer.android.com/develop/ui/compose/animation](https://developer.android.com/develop/ui/compose/animation)
 - **[xml-to-compose-bridge.md](xml-to-compose-bridge.md)** — full XML/View → Compose animation translation table with code pairs.
-- **`android-compose-animation`** skill — deep production technique library (shimmer, `AnchoredDraggable`, shared-element bounds transforms, time remapping, shaders) once the API choice above is made.

@@ -79,6 +79,8 @@ fun OrbitalMenuLayoutDemo(modifier: Modifier = Modifier) {
         scope.launch {
             selected.animateTo(
                 target,
+                // StiffnessLow + MediumBouncy = cards drift into position with a subtle
+                // wobble rather than snapping. StiffnessMedium feels like a rubber band; try it.
                 spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
                     stiffness = Spring.StiffnessLow,
@@ -131,6 +133,8 @@ fun OrbitalMenuLayoutDemo(modifier: Modifier = Modifier) {
                             scope.launch {
                                 val next = (selected.value - dragAmount / 160f)
                                     .coerceIn(0f, (n - 1).toFloat())
+                                // snapTo during drag: matches the finger exactly with zero latency.
+                                // animateTo here would fight the gesture and feel laggy.
                                 selected.snapTo(next)
                             }
                         },
@@ -238,6 +242,9 @@ private fun FanDeckLayout(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
+    // Layout instead of Box + offset modifiers: MeasurePolicy controls both measure and
+    // placement in one pass, and zIndex on placeRelative controls draw order without wrappers.
+    // Box + offsets would recompose every frame as `selected` changes; Layout only re-lays out.
     Layout(content = content, modifier = modifier) { measurables, constraints ->
         val loose = Constraints(maxWidth = constraints.maxWidth, maxHeight = constraints.maxHeight)
         val placeables = measurables.map { it.measure(loose) }
@@ -311,7 +318,8 @@ private val FanItems = listOf(
     FanItem("Settings", "spring settle on swipe", Color(0xFF38BDF8)),
 )
 
-/** 6 o'clock is the front of the deck. */
+/** 6 o'clock is the front of the deck — placing the focused item at the bottom center
+ *  makes it feel grounded and reachable, not floating at the top of the arc. */
 private fun orbitAngle(index: Int, selected: Float, count: Int): Float =
     PI.toFloat() / 2f + 2f * PI.toFloat() * (index - selected) / count.coerceAtLeast(1)
 

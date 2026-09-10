@@ -42,6 +42,8 @@ fun KeyframesThemeWipeDemo(modifier: Modifier = Modifier) {
     var dark by remember { mutableStateOf(false) }
     val fraction = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
+    // CubicBezierEasing(0.2, 0.8, 0.2, 1.0) mirrors the standard iOS "spring-like" curve —
+    // fast acceleration, gentle finish — which is why this feels premium rather than mechanical.
     val cinematic = remember { CubicBezierEasing(0.2f, 0.8f, 0.2f, 1.0f) }
 
     fun wipeTo(targetDark: Boolean) {
@@ -50,6 +52,9 @@ fun KeyframesThemeWipeDemo(modifier: Modifier = Modifier) {
             val target = if (targetDark) 1f else 0f
             fraction.animateTo(
                 targetValue = target,
+                // keyframes: unlike tween (one easing from A to B), keyframes lets you pin
+                // intermediate values at specific times. Here the wipe races ahead to ~90 %,
+                // overshoots to 103 %, then settles — that's three timing anchors, one spec.
                 animationSpec = keyframes {
                     durationMillis = 850
                     // Race ahead, slight overshoot, settle — the keyframes story
@@ -135,6 +140,9 @@ private fun ThemePane(isDark: Boolean, label: String, hint: String) {
     }
 }
 
+// drawWithContent + clipRect: a hard geometric crop at the render layer.
+// Using Box alpha or a scale modifier would fade/squash the content — we want a clean reveal
+// edge, not a dissolve. clipRect passes zero cost when f == 1 (full rect is a no-op clip).
 private fun Modifier.clipToFraction(f: Float): Modifier = drawWithContent {
     val right = size.width * f.coerceIn(0f, 1.05f).coerceAtMost(1f)
     clipRect(left = 0f, top = 0f, right = right, bottom = size.height) {
