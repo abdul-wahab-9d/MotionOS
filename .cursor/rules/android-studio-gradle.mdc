@@ -1,0 +1,31 @@
+---
+description: Use Android Studio Gradle home/JDK/SDK for all Gradle and APK builds; never Cursor sandbox cache
+alwaysApply: true
+---
+
+# Android Studio Gradle (shared cache)
+
+Cursor's agent shell often sets `GRADLE_USER_HOME` to `%TEMP%\cursor-sandbox-cache\*\gradle`. That re-downloads the wrapper and dependencies already on disk from Android Studio. Override it on **every** Gradle invocation.
+
+## Required environment (Windows)
+
+```powershell
+$env:GRADLE_USER_HOME = Join-Path $env:USERPROFILE '.gradle'
+$env:ANDROID_HOME = 'C:\Android\Sdk'
+$env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
+# Keep JAVA_HOME = Android Studio JBR (e.g. ...\Android Studio 2\jbr)
+.\gradlew.bat -g $env:GRADLE_USER_HOME assembleDebug
+```
+
+## Do
+
+- Use the project `gradlew` / `gradlew.bat`, same as Android Studio
+- Pass `-g $env:GRADLE_USER_HOME` so Gradle cannot fall back to the sandbox
+- Prefer `--offline` after Studio has already synced; retry online only into this same user home
+- Use `local.properties` `sdk.dir` / `C:\Android\Sdk`
+
+## Do not
+
+- Run Gradle with the default sandbox `GRADLE_USER_HOME`
+- Download another JDK, SDK, NDK, or Gradle distribution for a task Android Studio already has
+- Copy caches into the repo or Temp

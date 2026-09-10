@@ -112,6 +112,23 @@ Need motion?
 
 ---
 
+## Slide 7.5 — DEMO: AnimatedVisibility *(~1.5–2 min)*
+
+**Open:** Compose Lab → Animated Visibility Basics (or tap the "Appear / disappear?" branch on Slide 5)
+
+**Say:**
+> This one you already know — so fast. One boolean, `visible = true/false`. Enter runs in, Exit runs out. The trick is combining transitions with `+` — fade alone feels flat, fade + expand feels like the layout is breathing.
+
+**Do:** Tap Fade → Expand → Slide + Scale, toggle the switch each time.
+
+**Call out APIs:** `AnimatedVisibility`, `EnterTransition`, `ExitTransition`, the `+` combinator.
+
+**Team hook:** “Error banners, optional form fields, tooltips — this is most of our motion. Everything after this slide is for the 20% that needs more.”
+
+**30‑min:** Keep — it’s short and it’s the on-ramp before the “beyond the baseline” demos.
+
+---
+
 ## Slide 8 — DEMO: Morphing Action Button *(~3–4 min)*
 
 **Open:** Compose Lab → Morphing Action Button  
@@ -229,6 +246,24 @@ Custom drawing or layout?
 6. Fancy shaders need API guards + fallbacks  
 
 **Say (~3 min):** Walk bullets with “what breaks if we ignore this.”
+
+---
+
+## Slide 15.5 — DEMO: XML vs Compose — moving parts *(~1.5–2 min)*
+
+**On screen:** table — Behavior · XML/View parts · Compose (tap to reveal)
+
+**Say:**
+> One more before we apply this. For each thing we just built, here's what you'd wire together in XML versus Compose. Tap a row.
+
+**Do:** Tap 2–3 rows live (Morphing button is the strongest — 7 objects to coordinate vs. one `updateTransition`).
+
+**Caveat (say this out loud, don't skip it):**
+> These numbers are structural — the real shape of `AnimatorSet`, `MotionLayout`, custom `ViewGroup`. Not a specific implementation's line count. I'm not going to stand here and tell you Compose is magic — fewer moving parts is the honest claim.
+
+**Team hook:** This is the "why bother learning `updateTransition`" answer for anyone still on the fence.
+
+**30‑min:** Keep — short, and it's the strongest pitch to XML-only teammates in the whole deck.
 
 ---
 

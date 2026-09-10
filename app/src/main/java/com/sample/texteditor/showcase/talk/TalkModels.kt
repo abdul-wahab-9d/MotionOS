@@ -60,6 +60,7 @@ sealed interface SlideKind {
     ) : SlideKind
 
     data object Excess : SlideKind
+    data object Comparison : SlideKind
     data object Apply : SlideKind
     data object Qa : SlideKind
     data object Thanks : SlideKind
@@ -208,7 +209,12 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             kind = SlideKind.Tree(
                 heading = "Tap a branch we will prove",
                 branches = listOf(
-                    TreeBranch("Appear / disappear?", "AnimatedVisibility"),
+                    TreeBranch(
+                        question = "Appear / disappear?",
+                        api = "AnimatedVisibility",
+                        jumpToId = "avis",
+                        sharedKey = "branch-animatedVisibility",
+                    ),
                     TreeBranch("Swap content / screens?", "AnimatedContent"),
                     TreeBranch(
                         question = "Many props, one state?",
@@ -266,6 +272,30 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             title = "Animation APIs — what they do",
             notes = "Don’t read the table. The tree picks; this names them. Point at Appear, Drive, Specs, Continuity, Frame — then demo.",
             kind = SlideKind.ApiCatalog,
+        ),
+        DeckSlide(
+            id = "avis",
+            phase = TalkPhase.Proof,
+            layout = SlideLayout.Split,
+            kicker = "PROOF",
+            title = "AnimatedVisibility",
+            notes = "The baseline everyone already knows — made concrete. Same card, three Enter/Exit pairs, toggled live.",
+            kind = SlideKind.Demo(
+                demoId = "animated_visibility",
+                beats = listOf(
+                    "One boolean. Enter plays in, Exit plays out.",
+                    "Combine transitions with + — fadeIn() + expandVertically().",
+                    "Error banners, optional fields, tooltips — this is most of our motion.",
+                ),
+                apis = listOf("AnimatedVisibility", "EnterTransition", "ExitTransition"),
+                code = listOf(
+                    "AnimatedVisibility(visible = state) {",
+                    "  Card { /* content */ }",
+                    "}",
+                ),
+                accentLine = 0,
+                sharedKey = "branch-animatedVisibility",
+            ),
         ),
         DeckSlide(
             id = "morph",
@@ -491,6 +521,15 @@ fun buildTalkDeck(shortTrack: Boolean): List<DeckSlide> {
             title = "Same toolbox. Different intensity.",
             notes = "Pick ONE. Tap opens a portrait activity — rotate the emulator. Aurora = cinematic UI. Neon Rush = game loop. Back returns to the landscape deck.",
             kind = SlideKind.Excess,
+        ),
+        DeckSlide(
+            id = "comparison",
+            phase = TalkPhase.Ship,
+            layout = SlideLayout.Full,
+            kicker = "WHY COMPOSE",
+            title = "Same behavior. Fewer moving parts.",
+            notes = "Tap a row to reveal the Compose side. XML column is structural — real API shape, not a specific implementation's line count. Don't over-claim; the point is fewer objects to wire together, not \"Compose is magic.\"",
+            kind = SlideKind.Comparison,
         ),
         DeckSlide(
             id = "perf",

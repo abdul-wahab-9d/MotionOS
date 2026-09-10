@@ -1,0 +1,88 @@
+---
+description: Catalog of Android/Compose skills
+alwaysApply: true
+---
+
+# Android Skills (Always Apply)
+
+Before implementing, refactoring, or reviewing Android/Compose work, **read and follow the matching skill(s)**. Prefer skills over ad-hoc patterns.
+
+## How to use
+
+1. Identify the task domain (architecture, MVI, data, Compose UI, navigation, tests, etc.).
+2. Open the listed skill `SKILL.md` and follow its conventions (naming, layering, checklist).
+3. Do not invent conflicting patterns.
+
+Skill roots:
+
+- `C:\Users\user\.claude\skills\<name>\SKILL.md`
+- `C:\Users\user\.agents\skills\<name>\SKILL.md`
+- `C:\Users\user\.cursor\skills\<name>\SKILL.md`
+- `.cursor/skills/<name>/SKILL.md` (project skills, shipped with this repo)
+
+---
+
+## Locked decisions
+
+- **Skills:** Strict adherence — non-negotiable except approved deviations below.
+- **DI: Koin only.** Never Hilt/Dagger. Follow `android-di-koin`.
+- **Navigation: Navigation 3** (`navigation-3` skill). Not Nav2.
+- **Offline-first:** Room/DataStore.
+- **Modules:** Exactly 3 — `:app`, `:core:domain`, `:core:data`. Features are **packages under `:app`**, not `:feature:*` Gradle modules.
+- **Motion:** Premium feel via `android-compose-animation`; pick the API first with `android-compose-motion-decisions` (project skill, from the team talk).
+- **`android-architecture` override:** Use for Clean Architecture layers only; ignore Hilt.
+
+### Approved deviations (only these)
+
+| Skill | Deviation | Still follow |
+|---|---|---|
+| `android-module-structure` | Packages in `:app` / `:core:*` instead of `:feature:*` modules | Layer deps, version catalog, Koin, Room/DataStore |
+| `android-architecture` | Ignore Hilt | Clean layers; presentation ≠ data impls |
+| `android-navigation` | Use Navigation 3 | Type-safe keys; assemble in `:app` |
+---
+
+## Core architecture & layers
+
+| Skill | Use when |
+|---|---|
+| `android-architecture` | Layers, Clean Architecture (ignore Hilt) |
+| `android-module-structure` | Package layout, Gradle/catalog conventions |
+| `android-presentation-mvi` | State / Action / Event, ViewModel, Root+Screen, UiText |
+| `android-data-layer` | Data sources vs repositories, DTOs/mappers, offline-first |
+| `android-di-koin` | **Required** — Koin modules, `koinViewModel()` |
+| `android-error-handling` | `Result`, `DataError`, helpers |
+| `android-testing` | Fakes, JUnit5, AssertK, Turbine, robot UI tests |
+
+## Jetpack Compose & UI
+
+| Skill | Use when |
+|---|---|
+| `android-compose-ui` | Composables, recomposition, lists, a11y |
+| `android-compose-animation` | Springs, shimmer, gestures, shared elements |
+| `android-compose-motion-decisions` | **Start here for motion** — which API to pick, restraint rule, XML→Compose bridge (project skill) |
+| `material-3` | Material You / Material3 |
+| `edge-to-edge` | Insets / system bars |
+| `navigation-3` | Nav3 install, deep links, scenes |
+| `migrate-xml-views-to-jetpack-compose` | XML → Compose (if needed) |
+
+## Tooling
+
+| Skill | Use when |
+|---|---|
+| `android-cli` | SDK / env diagnostics |
+| `agp-9-upgrade` | AGP 9 migration |
+| `r8-analyzer` | Keep rules / size |
+| `play-billing-library-version-upgrade` | Billing (out of scope for this app) |
+| `mobile-best-practices` | Anti-patterns / performance review |
+| `android-aso` | Play Store listing |
+
+---
+
+## Project defaults
+
+- Clean Architecture; presentation never depends on data implementations
+- MVI (`State` / `Action` / `Event` + Root/Screen split)
+- Koin only; domain interfaces for every ViewModel dependency
+- Nav3 hub home + push destinations
+- Fakes over mocks; JUnit5 + AssertK + Turbine
+- Compose + Material3; animation skill for non-trivial motion
